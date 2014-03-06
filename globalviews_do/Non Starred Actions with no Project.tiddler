@@ -1,0 +1,1 @@
+<<mgtdList title:'[[Non Starred Actions with no Project]]'	newButtonTags:'Action Next'	mode:global	view:Generic	group:Area	gView:GenericGroup	gSort:prioritySlice	startTag:Action	tags:'Next && !Done && !Agenda && !Starred'	where:'!tiddler.hasParent("Project")'>>

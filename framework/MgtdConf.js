@@ -1,5 +1,5 @@
 
-config.options.txtTheme = 'MonkeyGTDTheme';
+config.options.txtTheme = 'WorkTimeTheme';
 
 if (!config.mGTD) config.mGTD = {};
 
@@ -27,7 +27,8 @@ config.mGTD.tagsToIndex = [
   "GTDComponent",
   "Sidebar",
   "Contact",
-  "TicklerRepeatType"
+  "TicklerRepeatType",
+  "Vision"
 ];
 
 config.mgtdVersion = "__REV__";

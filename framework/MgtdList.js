@@ -319,6 +319,15 @@ merge(config.macros,{
                 theList = theList.groupBy(function(t){return [t.modified.formatString('YYYY-0MM-0DD')];});
         wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle);
             }
+      //Start Added by Dossc - detect tickleDate for LandscapeTab
+      else if (groupBy == "AreaOrProject") {
+        theList = theList.groupBy(theList.formatAreaOrProject).reverse();
+        wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle,null,groupCountOnly,nbTags);
+      } else if (groupBy == "tickleDate") {
+        theList = theList.groupBy(theList.formatTickleDate).reverse();
+        wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle);
+      }
+      //End Added by Dossc
       else if (groupBy != "") {
         theList = theList.groupByTag(groupBy,sortBy,gSortBy);
         if (gTagExpr != "") theList = theList.filterGroupsByTagExpr(gTagExpr);

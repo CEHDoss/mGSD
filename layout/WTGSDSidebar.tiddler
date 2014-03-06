@@ -1,0 +1,6 @@
+<<tabs txtMGTDMain
+	"WTGTD" "WorkTime Space" WTGTDTab
+	"Landscape" "Landscape Space" LandscapeTab
+	"Wiki" "Wiki Space" WikiTab
+	"Config" "Configuration Options" ConfigMenu
+>>

@@ -1,0 +1,18 @@
+<<mgtdList title:FullReferenceList
+	newButtonTags:'Reference Starred'
+	groupCountOnly:starred
+	mode:global
+	group:AreaOrProject
+	gView:bold
+	gSort:orderSlice
+	view:link
+	sort:orderSlice
+	tags:'(Reference || Scratch) && !Done'
+	where:'tiddler.hasParent("Area") || (tiddler.hasParent("Project") && !store.getTiddler(tiddler.getParent("Project")).isTagged("Complete"))'
+>>
+{{tiny{
+<slider Advanced>
+[[modify menu|WikiTab]]
+[[MoreWikiTab]]
+</slider>
+}}}

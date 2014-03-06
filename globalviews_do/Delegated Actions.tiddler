@@ -1,0 +1,12 @@
+<<mgtdList title:'[[Delegated Actions]]'
+	newButtonTags:'Action [(Waiting For)]'
+	dontShowEmpty:yes
+	mode:global
+	group:AreaOrProject
+	gView:GenericGroup
+	startTag:Action
+	view:Generic
+	sort:Priority
+	tags:'[(Waiting For)] && !Done && !Agenda'
+	where:tiddler.hasActiveProject()
+>>

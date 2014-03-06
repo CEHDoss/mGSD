@@ -15,213 +15,251 @@ config.mGTD.data = {
 
 merge(Tiddler.prototype,{
 
-  render_Action: function() { return this.renderUtil(
-    '{{action{'+
-    '<<toggleTag Done [[%0]] ->>'+
-    '<<multiToggleTag tag:ActionStatus title:[[%0]]>>'+
-    //'<<multiSelectTag tag:Project title:[[%0]]>>'+
-    //'<<multiCheckboxTag tag:ActionStatus title:[[%0]]>>'+
-    '<<singleToggleTag tag:Starred title:[[%0]]>>'+
-    ' &nbsp;[[%0]] '+
-    '<<deleteTiddler [[%0]]>>'+
-    '}}}'+
-    '{{notesLink{<<showNotesIcon [[%0]]>>}}}',
-    [
-      this.title
-    ]
-  );},
+    //Comment by Dossc - why do I get the feeling I am going to regret this.
+    render_Generic: function() {
+        return this.renderGenericControls(this.getGenericControls());
+    },
 
-  render_Tickler: function() {
-    var repeatType = this.getByIndex('TicklerRepeatType');
-    var doneControl = "";
-    if (repeatType.length == 0 || repeatType.contains('Once')) {
-      // show normal done checkbox
-      doneControl = '<<toggleTag Actioned [[%0]] ->>';
-    }
-    else if (repeatType.contains('Daily'))       { doneControl = '<<addDay [[%0]]>>' }
-    else if (repeatType.contains('Weekly'))      { doneControl = '<<addWeek [[%0]]>>' }
-    else if (repeatType.contains('Fortnightly')) { doneControl = '<<addFortnight [[%0]]>>' }
-    else if (repeatType.contains('Monthly'))     { doneControl = '<<addMonth [[%0]]>>' }
-    else if (repeatType.contains('Yearly'))      { doneControl = '<<addYear [[%0]]>>' }
+    render_GenericGroup: function() {
+        var controls = this.getGenericControls();
 
-    var pLink = "";
-    if (config.mGTD.getOptChk('FullContactInActionLists')) {
-      pLink += "{{projLinkFull{<<linkToParent Project [[title]] [[%0]]>>}}}".format([this.title]);
-    }
-    else {
-      pLink += "{{projLink{<<linkToParent Project '[P]' [[%0]]>>}}}".format([this.title]);
-    }
+        controls['css'] = '';
+        controls['done'] = '';
+        controls['state'] = '';
+        controls['star'] = '';
 
-    return this.renderUtil(
-    '{{tickler{'+
-        '%1'+
-    '<<singleToggleTag tag:Starred title:[[%0]]>>'+
-    '<<dateChooser [[%0]]>>'+
-    '&nbsp;[[%0]]'+
-    '<<deleteTiddler [[%0]]>>'+
-    '}}}'+
-    '{{notesLink{<<showNotesIcon [[%0]]>>}}}'+
-    ' %2',
-    [
-      this.title,
-            doneControl.format([this.title]),
-      pLink
-    ]
-  );},
+        return this.renderGenericControls(controls);
+    },
 
-  render_Project: function() { return this.renderUtil(
-    '{{project{'+
-    '<<toggleTag Complete [[%0]] ->>'+
-    '<<multiToggleTag tag:ProjectStatus title:[[%0]]>>'+
-    //'<<multiSelectTag tag:Project title:[[%0]]>>'+
-    //'<<multiCheckboxTag tag:ActionStatus title:[[%0]]>>'+
-    '<<singleToggleTag tag:Starred title:[[%0]]>>'+
-    ' &nbsp;[[%0]] }}}'+
-    '{{notesLink{<<showNotesIcon [[%0]]>>}}}'+
-    "{{projLink{<<linkToParent Project '[P]' [[%0]]>>}}}"+
-    "{{projLink{<<linkToParent Contact '[C]' [[%0]]>>}}}"+
-    "",
-    [
-      this.title
-    ]
-  );},
+    getGenericControls: function() {
+        if (this.hasTag("Action")){
+            return this.getActionControls();
+        } else if(this.hasTag("Project")){
+            return this.getProjectControls();
+        } else if(this.hasTag("Tickler")){
+            return this.getTicklerControls();
+        } else if(this.hasTag("Area")){
+            return this.getAreaControls();
+        } else if(this.hasTag("Goal")){
+            return this.getAreaControls();
+        } else if(this.hasTag("Vision")){
+            return this.getAreaControls();
+        }// else
+        return this.getDefaultControls();
+    },
 
-  render_ProjectArea: function() {
-    var aLink = "";
-      return this.renderUtil(
-    '{{project{'+
-    '<<toggleTag Complete [[%0]] ->>'+
-    '<<multiToggleTag tag:ProjectStatus title:[[%0]]>>'+
-    //'<<multiSelectTag tag:Project title:[[%0]]>>'+
-    //'<<multiCheckboxTag tag:ActionStatus title:[[%0]]>>'+
-    '<<singleToggleTag tag:Starred title:[[%0]]>>'+
-    ' &nbsp;[[%0]] }}}'+
-    '{{notesLink{<<showNotesIcon [[%0]]>>}}}'+
-    "{{projLink{<<linkToParent Area    '[A]' [[%0]]>>}}}"+
-    "{{projLink{<<linkToParent Project '[P]' [[%0]]>>}}}"+
-    "{{projLink{<<linkToParent Contact '[C]' [[%0]]>>}}}"+
-    "",
-    [
-      this.title,
-      aLink
-    ]
-  );},
+    getDefaultControls: function() {
+        var pLink = "";
+        var link = "";
+        var note = "";
 
+        if (config.mGTD.getOptChk('FullAreaInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Area [[title]] [[%0]]>>}}}".format([this.title]); }
+        else { pLink += "{{projLink{<<linkToParent Area '[A]' [[%0]]>>}}}".format([this.title]); }
 
-  render_ProjectBare: function() { return this.renderUtil(
-    '{{project{'+
-    '<<singleToggleTag tag:Starred title:[[%0]]>>'+
-    '&nbsp;[[%0]] }}}'+
-    '{{notesLink{<<showNotesIcon [[%0]]>>}}}',
-    [
-      this.title
-    ]
-  );},
+        if (config.mGTD.getOptChk('FullProjectInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Project [[title]] [[%0]]>>}}}".format([this.title]); }
+        else { pLink += "{{projLink{<<linkToParent Project '[P]' [[%0]]>>}}}".format([this.title]); }
 
-  render_ProjectComplete: function() { return this.renderUtil(
-    '{{project{'+
-    '<<toggleTag Complete [[%0]] ->>'+
-    '<<singleToggleTag tag:Starred title:[[%0]]>>'+
-    '&nbsp;[[%0]] }}}'+
-    '{{notesLink{<<showNotesIcon [[%0]]>>}}}',
-    [
-      this.title
-    ]
-  );},
+        if (config.mGTD.getOptChk('FullContactInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Contact [[title]] [[%0]]>>}}}".format([this.title]);    }
+        else { pLink += "{{projLink{<<linkToParent Contact '[C]' [[%0]]>>}}}".format([this.title]); }
 
+        linkS = store.getTiddlerSlice(this.title, "link");
+        if(linkS){ link = ' [[link|'+linkS+']]'; }
 
-  render_ActionProj: function() {
+        var noteS = store.getTiddlerSlice(this.title, "note");
+        if(noteS){ note += ' ' + noteS; }
 
-    // actually it's not going to be easy to have
-    // an action in more than one project
-    // but just in case....
-    var pLink = "";
-    if (config.mGTD.getOptChk('FullAreaInActionLists')) {
-      pLink += "{{projLinkFull{<<linkToParent Area [[title]] [[%0]]>>}}}".format([this.title]);
-    }
-    else {
-      pLink += "{{projLink{<<linkToParent Area '[A]' [[%0]]>>}}}".format([this.title]);
-    }
+        return {    
+                    'css':'plain',
+                    'done':'',
+                    'state':'',
+                    'star':'<<singleToggleTag tag:Starred title:[[%0]]>>',
+                    'delete':'<<deleteTiddler [[%0]]>>',
+                    'pLink':pLink,
+                    'link':link,
+                    'note':note
+    };},
+    
+    renderGenericControls: function(controls) {
+        var cssOpen = "";
+        var cssClose = "";
+        
+        if(controls['css']){
+            cssOpen = '{{'+controls['css']+'{';
+            cssClose = '}}} ';
+        }
+    
+        return this.renderUtil(
+        cssOpen+
+        controls['done']+
+        controls['state']+
+        controls['star']+
+        ' [[%0]]'+
+        controls['delete']+
+        cssClose+controls['pLink']+controls['link']+'{{tiny{'+controls['note']+'}}}',
+        [
+            this.title
+        ]
+    );},
+    
+    render_Default: function() {
+        return this.renderGenericControls(this.getDefaultControls());
+    },
+    
+    render_Action: function() {
+        return this.renderGenericControls(this.getActionControls());
+    },
+    
+    getActionControls: function() {
+        controls = this.getDefaultControls();
+    
+        controls['css'] = 'action';
+        controls['done'] = '<<toggleTag Done [[%0]] ->>';
+        controls['state'] = '<<multiToggleTag tag:ActionStatus title:[[%0]]>>';
+        controls['delete'] += '<<newSavedTiddler prompt:"Enter name for new Action:" tooltip:"Create a new Action" label:"+" tag:"%0">>'.format([
+          String.encodeTiddlyLinkList(this.tags)]);
+        return controls;
+    },
+    
+    render_Area: function() {
+        return this.renderGenericControls(this.getAreaControls());
+    },
+    
+    getAreaControls: function() {
+        controls = this.getDefaultControls();
+        
+        var note = controls['note'];
+        
+        var visionS = this.getParent("Vision");
 
-    if (config.mGTD.getOptChk('FullProjectInActionLists')) {
-      pLink += "{{projLinkFull{<<linkToParent Project [[title]] [[%0]]>>}}}".format([this.title]);
-    }
-    else {
-      pLink += "{{projLink{<<linkToParent Project '[P]' [[%0]]>>}}}".format([this.title]);
-    }
+        if(visionS != ''){
+            note += ' | [['+visionS+']]';
+            var visionT = store.getTiddler(visionS);
+            if(visionT){
+                var whydoS = visionT.getParent("WhyDoes");
+                note += ' | [['+whydoS+']]';
+            }
+        }
+        
+        controls['note'] = note;
+        return controls;
+    },
+    
+    render_Tickler: function() {
+        return this.renderGenericControls(this.getTicklerControls());
+    },
+    
+    getTicklerControls: function() {
+        controls = this.getDefaultControls();
+        
+        controls['css'] = "tickler";
+        var repeatType = this.getByIndex('TicklerRepeatType');
+        if (repeatType.length == 0 || repeatType.contains('Once')) {
+            // show normal done checkbox
+            controls['done'] = '<<toggleTag Actioned [[%0]] ->>';
+        }
+        else if (repeatType.contains('Daily'))       { controls['done'] = '<<addDay [[%0]]>>' }
+        else if (repeatType.contains('WorkWeekly'))  { controls['done'] = '<<addDayWW [[%0]]>>' }
+        else if (repeatType.contains('Weekly'))      { controls['done'] = '<<addWeek [[%0]]>>' }
+        else if (repeatType.contains('Fortnightly')) { controls['done'] = '<<addFortnight [[%0]]>>' }
+        else if (repeatType.contains('Monthly'))     { controls['done'] = '<<addMonth [[%0]]>>' }
+        else if (repeatType.contains('Bimonthly'))   { controls['done'] = '<<addBimonth [[%0]]>>' }
+        else if (repeatType.contains('Halfyearly'))  { controls['done'] = '<<addHalfyear [[%0]]>>' }
+        else if (repeatType.contains('Yearly'))      { controls['done'] = '<<addYear [[%0]]>>' }
+        
+        controls['state'] = '<<dateChooser [[%0]]>>';
+        
+        return controls;
+    },
+    
+    render_Project: function() {
+        return this.renderGenericControls(this.getProjectControls());
+    },
+    
+    getProjectControls: function() {
+        controls = this.getDefaultControls();
+        
+        controls['css'] = "project";
+        controls['done'] = '<<toggleTag Complete [[%0]] ->>';
+        controls['state'] = '<<multiToggleTag tag:ProjectStatus title:[[%0]]>>';            
+        controls['note'] += ' '+this.modified.prettyDate();
+        
+        return controls;
+    },
 
-    if (config.mGTD.getOptChk('FullContactInActionLists')) {
-      pLink += "{{projLinkFull{<<linkToParent Contact [[title]] [[%0]]>>}}}".format([this.title]);
-    }
-    else {
-      pLink += "{{projLink{<<linkToParent Contact '[C]' [[%0]]>>}}}".format([this.title]);
-    }
+    render_link: function() {
 
-    return this.renderUtil(
-    '{{action{'+
-    '<<toggleTag Done [[%0]] ->>'+
-    '<<multiToggleTag tag:ActionStatus title:[[%0]]>>'+
-    '<<singleToggleTag tag:Starred title:[[%0]]>>'+
-    ' &nbsp;[[%0]]'+
-    '<<deleteTiddler [[%0]]>>'+
-    '}}}'+
-    '{{notesLink{<<showNotesIcon [[%0]]>>}}}'+
-    ' %1',
-    [
-      this.title,
-      pLink
-    ]
-  );},
+        var pLink = '';
+        var link = store.getTiddlerSlice(this.title, "link");
+        if (link){
+            pLink += '[[link|'+link+']]'
+        }
 
-  render_DoneAction: function() { return this.renderUtil(
-    '{{action{'+
-    '<<toggleTag Done [[%0]] ->>'+
-    '<<singleToggleTag tag:Starred title:[[%0]]>>'+
-    ' [[%0]] '+
-    '<<deleteTiddler [[%0]]>>'+
-    '}}}'+
-    '{{notesLink{<<showNotesIcon [[%0]]>>}}}',
-    [
-      this.title
-    ]
-  );},
+        return this.renderUtil(
+        '{{plain{[[%0]]}}} %1',
+        [
+            this.title,
+            pLink
+        ]
+    );},
 
-  render_ProjectHeading: function() { return this.renderUtil(
-    '{{project{'+
-    '[[%0]] '+
-    '<<toggleTag Complete [[%0]] ->>'+
-    '@@font-size:80%;<<multiToggleTag tag:ProjectStatus title:[[%0]]>>@@'+
-    '<<singleToggleTag tag:Starred title:[[%0]]>>'+
-    '}}}',
-    [
-      this.title
-    ]
-  );},
+    render_plain: function() {
+        return this.renderUtil(
+        '{{plain{[[%0]]}}}',
+        [
+            this.title
+        ]
+    );},
 
-  render_Context: function() { return this.renderUtil(
-    '[[%0]]',
-    [
-      this.title
-    ]
-  );},
+    render_note: function() { return this.renderUtil(
+        "[[%0]]"+' ~~<<tiddler [[%0::note]]>>~~',
+        [
+            this.title
+        ]
+    );},//Start Added by Dossc - Tickler Group view for LandscapeTab
 
-  render_plain: function() { return this.renderUtil(
-    '{{plain{[[%0]]}}}',
-    [
-      this.title
-    ]
-  );},
+    render_Tick: function() {
+        var repeatType = this.getByIndex('TicklerRepeatType');
+        var doneControl = "";
+        if (repeatType.length == 0 || repeatType.contains('Once')) {
+            // show normal done checkbox
+            doneControl = '<<toggleTag Actioned [[%0]] ->>';
+        }
+        else if (repeatType.contains('Daily'))       { doneControl = '<<addDay [[%0]]>>' }
+        else if (repeatType.contains('WorkWeekly'))  { doneControl = '<<addDayWW [[%0]]>>' }//Added by Dossc - button for WorkWeekly TicklerRepeatType
+        else if (repeatType.contains('Weekly'))      { doneControl = '<<addWeek [[%0]]>>' }
+        else if (repeatType.contains('Fortnightly')) { doneControl = '<<addFortnight [[%0]]>>' }
+        else if (repeatType.contains('Monthly'))     { doneControl = '<<addMonth [[%0]]>>' }
+        else if (repeatType.contains('Bimonthly'))   { doneControl = '<<addBimonth [[%0]]>>' }//Added by Dossc - bimonthly for WorkWeekly TicklerRepeatType
+        else if (repeatType.contains('Halfyearly'))  { doneControl = '<<addHalfyear [[%0]]>>' }//Added by Dossc - halfyearly for WorkWeekly TicklerRepeatType
+        else if (repeatType.contains('Yearly'))      { doneControl = '<<addYear [[%0]]>>' }
 
-  render_star: function() { return this.renderUtil(
-    '{{plain{'+
-    '<<singleToggleTag tag:Starred title:[[%0]]>>'+
-    '[[%0]]}}}'+
-    '{{notesLink{<<showNotesIcon [[%0]]>>}}}',
-    [
-      this.title
-    ]
-  );},
+        return this.renderUtil(
+        '{{tickler{'+'%1'+  
+        '&nbsp;[[%0]]'+
+        '}}}',
+        [
+            this.title,
+            doneControl.format([this.title])
+        ]
+    );},//End Added by Dossc
 
+    render_star: function() { 
+        var pLink = '';
+        var link = store.getTiddlerSlice(this.title, "link");
+        if (link){
+            pLink += '[[link|'+link+']]'
+        }
+
+        return this.renderUtil(
+        '{{plain{'+
+        '<<singleToggleTag tag:Starred title:[[%0]]>>'+
+        '[[%0]]}}} %1',
+        //'{{notesLink{<<showNotesIcon [[%0]]>>}}}',//Removed by Dossc - takes a long time to render references; remember to move the coma
+        [
+            this.title,
+            pLink //Added by Dossc - add link to refrences for More Wiki Functions
+        ]
+    );},
 
   // TODO. this seems stupid
   render_bold: function() { return this.renderUtil(

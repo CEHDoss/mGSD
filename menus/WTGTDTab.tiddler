@@ -1,0 +1,31 @@
+<<mgtdList title:FullViewList
+	newButtonTags:'View GTD Starred'
+	mode:global
+	group:Area
+	groupCountOnly:starred
+	gView:bold
+	gSort:prioritySlice
+	startTag:View
+	sort:title
+>><<mgtdList title:'[[DoByContext|Next Actions]]'
+	newButtonTags:'Action Next Starred'
+	mode:global
+	startTag:Action
+	group:Context
+	groupCountOnly:yes
+	gView:plain
+	gSort:orderSlice
+	tags:'Next && !Done'
+	where:tiddler.hasActiveProject()
+>>
+
+{{tiny{
+<slider Advanced>
+[[modify menu|WTGTDTab]]
+[[excludeSearch]]
+[[GTDComponent]]
+[[DefaultTiddlers]]
+[[WTAliases]]
+<<tiddler [[WTAliases]]>>
+</slider>
+}}}

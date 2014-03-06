@@ -1,0 +1,1 @@
+<<mgtdList title:'[[Future Actions with no Project]]'	newButtonTags:'Action Next'	mode:global	group:Area	gView:GenericGroup	gSort:prioritySlice	startTag:Action	view:Generic	tags:'Future && !Done && !Agenda'	where:'!tiddler.hasParent("Project") && !tiddler.hasParent("Action")'>>

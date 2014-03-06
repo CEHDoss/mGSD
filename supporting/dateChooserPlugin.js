@@ -53,8 +53,8 @@ if (DatePicker) {
 		},
 
 		addDay: {
-            label:   {addDay:"+d",  addWeek:"+w",   addFortnight:"+f",        addMonth:"+m",    addYear:"+y"   },
-			tooltip: {addDay:"day", addWeek:"week", addFortnight:"fortnight", addMonth:"month", addYear:"year" },
+            label:   {addDay:"+d",  addWeek:"+w",   addFortnight:"+f",        addMonth:"+m",    addYear:"+y",   addDayWW:"+ww",      addBimonth:"+bm",     addHalfyear:"+hy"      },
+			tooltip: {addDay:"day", addWeek:"week", addFortnight:"fortnight", addMonth:"month", addYear:"year", addDayWW:"workweek", addBimonth:"bimonth", addHalfyear:"halfyear" },
 			handler: function(place,macroName,params,wikifier,paramString,tiddler) {
 				var useTiddler = tiddler;
 				if (params[0]) useTiddler = store.fetchTiddler(params[0]);
@@ -79,6 +79,10 @@ if (DatePicker) {
 	config.macros.addFortnight = config.macros.addDay;
 	config.macros.addMonth     = config.macros.addDay;
 	config.macros.addYear      = config.macros.addDay;
+
+	config.macros.addDayWW     = config.macros.addDay;
+	config.macros.addBimonth   = config.macros.addDay;
+	config.macros.addHalfyear  = config.macros.addDay;
 
 } // if (DatePicker)
 

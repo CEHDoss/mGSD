@@ -1,5 +1,5 @@
-<<mgtdList title:'[[Next Actions by Context]]'
-	newButtonTags:'Action Next'
+<<mgtdList title:'[[Starred Actions]]'
+	newButtonTags:'Action Next Starred'
 	dontShowEmpty:yes
 	mode:global
 	group:Context
@@ -8,5 +8,5 @@
 	startTag:Action
 	view:Generic
 	tags:'Next && !Done && !Agenda'
-	where:tiddler.hasActiveProject()
+	where:tiddler.isStarred()
 >>

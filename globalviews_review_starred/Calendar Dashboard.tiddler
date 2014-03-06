@@ -1,0 +1,37 @@
+<<forEachTiddler
+where 'tiddler.isTagged("Tickler") && !tiddler.isTagged("Actioned")'
+sortBy 'tiddler.fields["mgtd_date"]'
+script 'var day = 1;
+	var today = new Date();
+	var pDate;
+	function nextTiddler(t){ 
+		var cDate = Date.convertFromYYYYMMDDHHMM(t.fields["mgtd_date"]);
+		var re = "";
+		if(!pDate){
+			re += "|S|M|T|W|H|F|S|h\n|"
+			if(cDate < today){
+				re += skipDays(today.getDay(), "");
+				today.setHours(0,0,0,0);
+				pDate = today;
+			} else {
+				re += skipDays(Math.floor((cDate - pDate + 3600000)/86400000), "");
+				pDate = cDate;
+			}
+		} else if(cDate.valueOf() != pDate.valueOf() && cDate > today){
+			//added flor(+ 3600000) to compensate for DLST
+			re += skipDays(Math.floor((cDate - pDate + 3600000)/86400000), "");
+			pDate = cDate;
+		} else {
+			re += "<br />";
+		}
+		re += "[["+t.title+"]]";
+		return re;
+	};
+	function skipDays(c, re){
+		if(c < 0)return "";
+		for(;c--;)re += (day++%7==0?"|\n|":"|");
+		return re;
+	};'
+write 'nextTiddler(tiddler)'
+begin '""'
+end '"|"'>>

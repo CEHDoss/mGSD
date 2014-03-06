@@ -1,0 +1,8 @@
+<<tabs txtMainTab
+	"Tags" "tags" TabTags
+	"Timeline" "Timeline" TabTimeline
+	"Orph" "Orphaned tiddlers" TabMoreOrphans
+	"All" "All tiddlers" TabAll
+	"Miss" "Missing tiddlers" TabMoreMissing
+	"Shad" "Shadowed tiddlers" TabMoreShadowed
+>>

@@ -1,0 +1,11 @@
+<<mgtdList title:'[[Non Starred Delegated Actions]]'
+	newButtonTags:'Action [(Waiting For)] Starred'
+	dontShowEmpty:yes
+	mode:global
+	group:AreaOrProject
+	gView:GenericGroup
+	startTag:Action
+	view:Generic
+	tags:'[(Waiting For)] && !Done && !Agenda'
+	where:'tiddler.hasActiveProject()&&!tiddler.isStarred()'
+>>

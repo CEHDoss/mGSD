@@ -1,0 +1,141 @@
+{{cols3{
+{{col{
+<<mgtdList title:'WhyDoes'
+	newButtonTags:'WhyDoes'
+	mode:global
+	startTag:WhyDoes
+	view:plain
+	sort:prioritySlice
+>><<mgtdList title:'WhyDoes @@without@@ Visions'
+	dontShowEmpty:yes
+	newButtonTags:'WhyDoes'
+	mode:global
+	startTag:WhyDoes
+	view:plain
+	sort:prioritySlice
+	where:'fastTagged(tiddler.title).filterByTagExpr("Vision")==0'
+>><<mgtdList title:'Visions'
+	newButtonTags:'Vision'
+	mode:global
+	group:WhyDoes
+	gView:GenericGroup
+	gSort:prioritySlice
+	startTag:Vision
+	view:plain
+	sort:prioritySlice
+	tags:'!Complete'
+>><<mgtdList title:'Visions @@without@@ Goals'
+	dontShowEmpty:yes
+	group:WhyDoes
+	gView:GenericGroup
+	gSort:prioritySlice
+	startTag:Vision
+	view:plain
+	sort:prioritySlice
+	tags:'!Complete'
+	where:'fastTagged(tiddler.title).filterByTagExpr("Goal")==0'
+>><<mgtdList title:'Visions @@without@@ Area'
+	dontShowEmpty:yes
+	group:WhyDoes
+	gView:GenericGroup
+	gSort:prioritySlice
+	startTag:Vision
+	view:plain
+	sort:prioritySlice
+	tags:'!Complete'
+	where:'fastTagged(tiddler.title).filterByTagExpr("Area")==0'
+>><<mgtdList title:'Areas of Responsibility (w/o [[DMwLS|Do More with Less Stress]])'
+	newButtonTags:'Area'
+	mode:global
+	group:Vision
+	gView:GenericGroup
+	gSort:prioritySlice
+	startTag:Area
+	view:plain
+	sort:prioritySlice
+	tags:'!Complete'
+	where:'!tiddler.isTagged("Do More with Less Stress")'
+>><<mgtdList title:'Areas @@without@@ actions (w/o [[DMwLS|Do More with Less Stress]])'
+	dontShowEmpty:yes
+	group:Vision
+	gView:GenericGroup
+	gSort:prioritySlice
+	startTag:Area
+	view:plain
+	sort:prioritySlice
+	tags:'!Complete'
+	where:'!tiddler.isTagged("Do More with Less Stress")&&!tiddler.hasNextActionOrSubProjectOrTickler()&&tiddler.hasParent("Vision")'
+>>
+}}}
+{{cols2{
+<<mgtdList title:'Goals'
+	newButtonTags:'Project Goal'
+	mode:global
+	group:Vision
+	gView:GenericGroup
+	gSort:prioritySlice
+	startTag:Goal
+	view:Generic
+	sort:prioritySlice
+	tags:'!Complete'
+>><<mgtdList title:'Goals @@without@@ Actions'
+	dontShowEmpty:yes
+	group:Vision
+	gView:GenericGroup
+	gSort:prioritySlice
+	startTag:Goal
+	view:Generic
+	sort:prioritySlice
+	tags:'!Complete'
+	where:'!tiddler.hasNextActionOrSubProjectOrTickler()&&tiddler.title != "Do More with Less Stress"'
+>><<mgtdList title:'Current Projects'
+	newButtonTags:'Project Starred'
+	mode:global
+	group:AreaOrProject
+	gView:GenericGroup
+	gSort:prioritySlice
+	groupCountOnly:starred
+	startTag:Project
+	view:Generic
+	sort:Priority
+	tags:'!Complete && !Goal'
+>><<mgtdList title:'Current Projects @@without@@ actions'
+	newButtonTags:'Project Starred'
+	dontShowEmpty:yes
+	mode:global
+	group:AreaOrProject
+	gView:GenericGroup
+	gSort:prioritySlice
+	startTag:Project
+	view:Generic
+	sort:Priority
+	tags:'!Complete && Active && !Goal'
+	where:!tiddler.hasNextActionOrSubProjectOrTickler()
+>><<mgtdList title:'Runway'
+	newButtonTags:'Action Starred'
+	mode:global
+	groupCountOnly:starred
+	group:Area
+	gView:GenericGroup
+	gSort:prioritySlice
+	startTag:Action
+	view:Generic
+	sort:Priority
+	tags:'Starred && !Done'
+	where:tiddler.hasParent("Area")
+>><<mgtdList title:'Project - Runway'
+	mode:global
+	groupCountOnly:starred
+	group:Area
+	gView:GenericGroup
+	gSort:prioritySlice
+	view:Generic
+	sort:Priority
+	tags:'(Action || Project) && Starred && !Complete && !Done'
+	where:tiddler.hasParent("Area")
+>>
+
+	startTag:Action
+
+}}}
+}}}

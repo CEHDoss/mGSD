@@ -1,0 +1,37 @@
+{{cols2{
+
+{{col{
+
+<<tiddler [[Starred Delegated Actions]]>>
+
+<<tiddler [[Non Starred Delegated Actions]]>>
+
+}}}
+
+{{col{
+
+<<mgtdList
+	title:'Future Actions with Project'
+	newButtonTags:'Action Future'
+	mode:global
+	group:Project
+	gView:GenericGroup
+	startTag:Action
+	view:Generic
+	tags:'Future && !Done'
+	where:'!tiddler.hasParent("Action")&&tiddler.hasParent("Project")'
+>><<mgtdList
+	title:'Actions Waiting For Delegated Actions'
+	startTag:Action
+	tags:'Future && !Done'
+	where:'tiddler.hasParent("Action")'
+	view:Generic
+	mode:global
+	group:Action
+	gView:GenericGroup
+	newButtonTags:'Action Future'
+>>
+
+}}}
+
+}}}

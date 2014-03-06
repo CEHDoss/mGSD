@@ -158,6 +158,34 @@ config.indexedTags = {
       return false;
     },
 
+    hasVision: function() {
+      var projs = this.getByIndex("Area");
+
+      if (projs.length == 0)
+        return false;
+
+      for (var i=0;i<projs.length;i++)
+        if (store.fetchTiddler(projs[i]).hasParent("Vision"))
+          return true;
+      return false;
+    },
+
+    isStarred: function() {
+      if(this.isTagged("Starred"))return true;
+	  //if(!this.isTagged("Action"))return false; //Removed by Dossc - I want to include references
+	  var projs = this.getByIndex("Project");
+	  
+	  if (projs.length == 0)
+	    return false;
+		
+	  for (var i=0;i<projs.length;i++)
+	    if ((store.fetchTiddler(projs[i]).isTagged("Starred"))
+		    && !store.fetchTiddler(projs[i]).tags.contains('Complete') // seems stupid
+			)
+		  return true;
+	  return false;
+	},
+
     getAreasForAction: function() {
       // we will go to some trouble to permit actions in multiple areas
       // either explicitly or via their project...
@@ -184,7 +212,14 @@ config.indexedTags = {
 
     hasSubProject: function() {
       var children = fastTagged(this.title).filterByTagExpr('Project && !Complete && Active');
-      return children.length > 0;
+	  if(children.length <= 0){
+	    children = fastTagged(this.title).filterByTagExpr('Area')
+		for(var i = 0; i < children.length;i++){
+		  if(fastTagged(children[i].title).filterByTagExpr('Project && !Complete').length > 0)return true;
+		}
+		return false;
+	  }else return true;
+	  //return children.length > 0;
     },
 
     hasNextActionOrSubProject: function() {

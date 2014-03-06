@@ -302,6 +302,10 @@ merge(config.macros,{
         if (!label) label = t.title;
         var cl = createTiddlyButton(place, label, t.title, function(e) {
             actOnTiddler.setTagFromGroup(tag,t.title);
+            addTag = store.getTiddlerSlice(t.title, "addTag");
+            if(addTag)addTag.split(',').each(function(t){
+              actOnTiddler.addTag(t);
+            });
             if (refresh == "page")
               refreshPageTemplate();
             return false;

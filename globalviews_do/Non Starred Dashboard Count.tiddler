@@ -1,0 +1,11 @@
+<<mgtdList title:'[[Non Starred Dashboard]]'
+	dontShowEmpty:yes
+	mode:global
+	groupCountOnly:yes
+	group:Context
+	gView:GenericGroup
+	gSort:orderSlice
+	startTag:Action
+	tags:'(Action || Project) && (Next || Active || "Waiting For") && !Agenda && !Done && !Complete'
+	where:tiddler.hasActiveProject()&&!tiddler.isStarred()
+>>

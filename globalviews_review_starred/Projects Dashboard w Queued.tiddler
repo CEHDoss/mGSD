@@ -1,0 +1,25 @@
+{{cols2{
+
+{{col{
+
+<<tiddler [[Starred Projects by Area]]>>
+
+<<tiddler [[Non Starred Projects by Area]]>>
+
+<<tiddler [[Queued Projects]]>>
+
+}}}
+
+{{col{
+
+<<tiddler [[Someday/Maybe Projects]]>>
+
+{{scroll10{
+
+<<tiddler [[Completed Projects]]>>
+
+}}}
+
+}}}
+
+}}}

@@ -1,0 +1,9 @@
+<<mgtdList title:'[[Starred Projects]]'
+	newButtonTags:'Project Active Starred'
+	dontShowEmpty:yes
+	mode:global
+	startTag:Project
+	view:Generic
+	sort:title
+	tags:'Active && !Complete && Starred'
+>>

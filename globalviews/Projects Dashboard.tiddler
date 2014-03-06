@@ -1,9 +1,12 @@
-
 {{cols2{
 
 {{col{
 
 <<mgtdList title:'Active Projects' startTag:Project tags:'Active && !Complete' view:ProjectArea mode:global
+	newButtonTags:'Project Active'
+	>>
+
+<<mgtdList title:'Active Projects' startTag:Project tags:'Queued && !Complete' view:ProjectArea mode:global
 	newButtonTags:'Project Active'
 	>>
 

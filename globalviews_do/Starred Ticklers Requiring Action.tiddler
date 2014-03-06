@@ -1,0 +1,11 @@
+<<mgtdList title:'[[Starred Ticklers Requiring Action]]'
+	newButtonTags:'Tickler Once Starred'
+	dontShowEmpty:yes
+	mode:global
+	startTag:Tickler
+	view:Generic
+	sort:title
+	tags:'!Actioned && Starred'
+	where:'tiddler.ticklerIsActive()'
+	ignoreRealm:{{config.mGTD.getOptChk('AlertsIgnoreRealm')?'yes':''}}
+>>

@@ -3152,51 +3152,61 @@ config.indexedTags.init(config.mGTD.tagsToIndex);
 <div title="MgtdProcessInbox" modifier="YourName" modified="200803301359" created="200803231541" tags="systemConfig">
 <pre>merge(config.macros,{
 	processInbox: {
+	    //TODO why must shortHand variables exist inside a function.  Why!?!
+	    //TODO shortHand should really read from a Context slice
 		handler: function(place,macroName,params,wikifier,paramString,tiddler) {
 
 			var shortHand = {
-				'W': 'Waiting For',
-				'N': 'Next',
-				'F': 'Future'
+				Action: {
+					'W': 'Waiting For',
+					'N': 'Next',
+					'F': 'Future',
+					'S': 'Starred',
+					//Start Added by Dossc - Commonly used Context
+					'NE': 'Anywhere',
+					'C': 'Computer',
+					'A': 'Agenda',
+					'LE': 'LowEnergy',
+					'Q': 'Quick',
+					'L': 'Long',
+					//End Addded by Dossc
+				},
+				Project: {
+					'A': 'Active',
+					'SM': 'Someday/Maybe',
+					'S': 'Starred',
+				}
 			};
 
-			// TODO move this help elsewhere...
-			/*
-			wikify(
-				&quot;Enter projects and actions here. Click 'create these items' to create them\n&quot;+
-				&quot;Example usage:\n{{{\nPaint House|Home Maintenance\n&quot;+
-				&quot;.Buy ladder and brushes|Errands\n&quot;+
-				&quot;.Choose colours|Home|W\n&quot;+
-				&quot;\n}}}\n&quot;+
-				&quot;By default actions are next actions. &quot;+
-				&quot;Specify W or F to make them future or Waiting For. You can create multiple projects.\n\n&quot;
-			,place);
-			*/
-
-			wikify(&quot;Quick add projects and actions (See [[About Quick Add]] for more info):\n&quot;,place);
-			var pi = createTiddlyElement(place,&quot;textarea&quot;,null,&quot;piBox&quot;);
+			wikify("Quick add projects and actions (See [[About Quick Add]] for more info):\n",place);
+			var pi = createTiddlyElement(place,"textarea",null,"piBox");
 			
-			wikify(&quot;\n&quot;,place);
+			wikify("\n",place);
 
-			var a1 = createTiddlyCheckbox(place,&quot;Open created projects&quot;,true,null);
+			var a1 = createTiddlyCheckbox(place,"Open created projects",true,null);
 			a1.id = 'piShowProjects';
 
-			var a2 = createTiddlyCheckbox(place,&quot;Open created actions&quot;,true,null);
+			var a2 = createTiddlyCheckbox(place,"Open created actions",true,null);
 			a2.id = 'piShowActions';
 
-			wikify(&quot;\n&quot;,place);
+			wikify("\n",place);
 
-			var btn = createTiddlyButton(place,&quot;quick add now&quot;,&quot;create these items&quot;,function(e) {
-				var lines = pi.value.split(&quot;\n&quot;);
-				var currentProject = &quot;&quot;;
+			var btn = createTiddlyButton(place,"quick add now","create these items",function(e) {
+				var lines = pi.value.split("\n");
+				var currentProject = "";
 				var displayThese = [];
 
-				for (var i=0;i&lt;lines.length;i++) {
-					//alert(lines[i]);
-					var fields = lines[i].split(/[|;]/);
+				for (var i=0;i<lines.length;i++) {
 
-					if (!fields[0] || fields[0].trim() == &quot;&quot;) {
-						currentProject = &quot;&quot;;
+					var fields_and_text = lines[i].trim().split(/[|;]{2}/); // anything after || is to become tiddler content
+					
+
+					var fields = fields_and_text[0].trim().split(/[|;]/);
+					var tiddlerText = fields_and_text[1];
+
+
+					if (!fields[0] || fields[0].trim() == "") {
+						currentProject = "";
 					}
 					else {
 
@@ -3206,21 +3216,34 @@ config.indexedTags.init(config.mGTD.tagsToIndex);
 						// add the realm
 						fields.push(config.macros.mgtdList.getRealm());
 
-						if (title[0] != '.') {
-							//alert(&quot;project &quot;+title);
+						if (title.substr(0,1) != '.') {
+
+							//alert("project "+title);
+
 							currentProject = title;
 
 							if (document.getElementById('piShowProjects').checked)
 								displayThese.push(title);
 
-							fields.push(&quot;Project&quot;); // make it a project
-							fields.push(&quot;Active&quot;); // make it active
+							fields.push("Project"); // make it a project
+							//fields.push("Active"); // make it active
+
+							if (!fields.containsAny(['SM','A', 'Q']))
+								fields.push('A');
+
+							fields = fields.map(function(f) {
+								if (shortHand['Project'][f])
+									return shortHand['Project'][f];
+								else
+									return f;
+							});
+
 							if (store.tiddlerExists(title))
-								alert(&quot;Warning: '&quot;+title+&quot;' already exists, did not create&quot;);
+								alert("Warning: '"+title+"' already exists, did not create");
 							else
 								store.saveTiddler(
 									title,title,
-									&quot;&quot;, // content
+									tiddlerText ? tiddlerText : "", // content
 									config.options.txtUserName,
 									new Date(),
 									fields, // tags
@@ -3228,36 +3251,55 @@ config.indexedTags.init(config.mGTD.tagsToIndex);
 								);
 						}
 						else {
+							//alert("action "+title);
 
 							// default to next actions
 							if (!fields.containsAny(['N','F','W']))
 								fields.push('N');
 
 							fields = fields.map(function(f) {
-								if (shortHand[f] &amp;&amp; shortHand[f] != '')
-									return shortHand[f];
+								if (shortHand['Action'][f])
+									return shortHand['Action'][f];
 								else
 									return f;
 							});
 
-							//alert(&quot;action &quot;+title);
+							//alert("action "+title);
 							title = title.trim();
 							title = title.replace(/^\.+/,'');
+
+							// If the action is already existing
+							// let's presume that we want to create it as a unique action.
+							// Use some code from NewMeansNewPlugin.
+							if (config.macros.newTiddler.getName)
+								title = config.macros.newTiddler.getName(title);
 
 							if (document.getElementById('piShowActions').checked)
 								displayThese.push(title);
 
-							fields.push(&quot;GTD&quot;); // make it a GTD item
-							fields.push(&quot;Action&quot;); // make it an action 
-							if (currentProject.trim() != &quot;&quot;)
+							fields.push("Action"); // make it an action 
+							if (currentProject.trim() != "")
 								fields.push(currentProject); // make it in this project
 
+							// these should be configurable
+							var automagicContexts = {
+								'Call':'call',
+								'Errand':'buy'
+							};
+							for (amc in automagicContexts) {
+								var checkExists = store.fetchTiddler(amc);
+								var startString = automagicContexts[amc];
+								if (title.substr(0,startString.length).toLowerCase() == startString && checkExists && checkExists.hasTag('Context')) {
+									fields.push(amc);
+								}
+							}
+
 							if (store.tiddlerExists(title))
-								alert(&quot;Warning: '&quot;+title+&quot; already exists, did not create&quot;);
+								alert("Warning: '"+title+" already exists, did not create");
 							else
 								store.saveTiddler(
 									title,title,
-									&quot;&quot;, // content
+									tiddlerText ? tiddlerText : "", // content
 									config.options.txtUserName,
 									new Date(),
 									fields, // tags
@@ -3267,10 +3309,15 @@ config.indexedTags.init(config.mGTD.tagsToIndex);
 					}
 				}
 
-				for (var ii=0;ii&lt;displayThese.length;ii++)
-					story.displayTiddler(&quot;bottom&quot;,displayThese[ii]);
+				for (var ii=0;ii<displayThese.length;ii++)
+					story.displayTiddler("bottom",displayThese[ii]);
 
-				alert(&quot;Done creating items&quot;);
+				displayMessage("Quick add items created");
+
+				// Clear the quick add text area and close the slider. (jQuery anyone?)
+				jQuery(pi).val('');
+				jQuery(pi).closest('.sliderPanel').hide();
+
 				return false;
 			}); // end of createTiddlyButton
 
@@ -6052,104 +6099,243 @@ config.mGTD.data = {
 
 merge(Tiddler.prototype,{
 
-	render_Action: function() { return this.renderUtil(
-		'{{action{'+
-		'&lt;&lt;toggleTag Done [[%0]] -&gt;&gt;'+
-		'&lt;&lt;multiToggleTag tag:ActionStatus title:[[%0]]&gt;&gt;'+
-		//'&lt;&lt;multiSelectTag tag:Project title:[[%0]]&gt;&gt;'+
-		//'&lt;&lt;multiCheckboxTag tag:ActionStatus title:[[%0]]&gt;&gt;'+
-		'&lt;&lt;singleToggleTag tag:Starred title:[[%0]]&gt;&gt;'+
-		' &amp;nbsp;[[%0]] }}}',
+	//Comment by Dossc - why do I get the feeling I am going to regret this.
+	render_Generic: function() {
+		return this.renderGenericControls(this.getGenericControls());
+	},
+	
+	render_GenericGroup: function() {
+		var controls = this.getGenericControls();
+		
+		controls['css'] = '';
+		controls['done'] = '';
+		controls['state'] = '';
+		controls['star'] = '';
+		
+		return this.renderGenericControls(controls);
+	},
+	
+	getGenericControls: function() {
+		if (this.hasTag("Action")){
+			return this.getActionControls();
+		} else if(this.hasTag("Project")){
+			return this.getProjectControls();
+		} else if(this.hasTag("Tickler")){
+			return this.getTicklerControls();
+		} else if(this.hasTag("Area")){
+			return this.getAreaControls();
+		} else if(this.hasTag("Goal")){
+			return this.getAreaControls();
+		} else if(this.hasTag("Vision")){
+			return this.getAreaControls();
+		}// else
+		return this.getDefaultControls();
+	},
+	
+	getDefaultControls: function() {
+		var pLink = "";
+		var link = "";
+		var note = "";
+		
+		if (config.mGTD.getOptChk('FullAreaInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Area [[title]] [[%0]]>>}}}".format([this.title]); }
+		else { pLink += "{{projLink{<<linkToParent Area '[A]' [[%0]]>>}}}".format([this.title]); }
+
+		if (config.mGTD.getOptChk('FullProjectInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Project [[title]] [[%0]]>>}}}".format([this.title]); }
+		else { pLink += "{{projLink{<<linkToParent Project '[P]' [[%0]]>>}}}".format([this.title]); }
+
+		if (config.mGTD.getOptChk('FullContactInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Contact [[title]] [[%0]]>>}}}".format([this.title]);	}
+		else { pLink += "{{projLink{<<linkToParent Contact '[C]' [[%0]]>>}}}".format([this.title]); }
+		
+		linkS = store.getTiddlerSlice(this.title, "link");
+		if(linkS){ link = ' [[link|'+linkS+']]'; }
+		
+		var noteS = store.getTiddlerSlice(this.title, "note");
+		if(noteS){ note += ' ' + noteS; }
+		
+		return {	
+					'css':'plain',
+					'done':'',
+					'state':'',
+					'star':'<<singleToggleTag tag:Starred title:[[%0]]>>',
+					'delete':'<<deleteTiddler [[%0]]>>',
+					'pLink':pLink,
+					'link':link,
+					'note':note
+	};},
+	
+	renderGenericControls: function(controls) {
+		var cssOpen = "";
+		var cssClose = "";
+		
+		if(controls['css']){
+			cssOpen = '{{'+controls['css']+'{';
+			cssClose = '}}} ';
+		}
+	
+		return this.renderUtil(
+		cssOpen+
+		controls['done']+
+		controls['state']+
+		controls['star']+
+		' [[%0]]'+
+		controls['delete']+
+		cssClose+controls['pLink']+controls['link']+'{{tiny{'+controls['note']+'}}}',
 		[
 			this.title
 		]
 	);},
+	
+	render_Default: function() {
+		return this.renderGenericControls(this.getDefaultControls());
+	},
+	
+	render_Action: function() {
+		return this.renderGenericControls(this.getActionControls());
+	},
+	
+	getActionControls: function() {
+		controls = this.getDefaultControls();
+	
+		controls['css'] = 'action';
+		controls['done'] = '<<toggleTag Done [[%0]] ->>';
+		controls['state'] = '<<multiToggleTag tag:ActionStatus title:[[%0]]>>';
+		controls['delete'] += '<<newSavedTiddler prompt:"Enter name for new Action:" tooltip:"Create a new Action" label:"+" tag:"%0">>'.format([
+          String.encodeTiddlyLinkList(this.tags)]);
+		return controls;
+	},
+	
+	render_Area: function() {
+		return this.renderGenericControls(this.getAreaControls());
+	},
+	
+	getAreaControls: function() {
+		controls = this.getDefaultControls();
+		
+		var note = controls['note'];
+		
+		var visionS = this.getParent("Vision");
 
-	render_Project: function() { return this.renderUtil(
-		'{{project{'+
-		'&lt;&lt;toggleTag Complete [[%0]] -&gt;&gt;'+
-		'&lt;&lt;multiToggleTag tag:ProjectStatus title:[[%0]]&gt;&gt;'+
-		//'&lt;&lt;multiSelectTag tag:Project title:[[%0]]&gt;&gt;'+
-		//'&lt;&lt;multiCheckboxTag tag:ActionStatus title:[[%0]]&gt;&gt;'+
-		'&lt;&lt;singleToggleTag tag:Starred title:[[%0]]&gt;&gt;'+
-		' &amp;nbsp;[[%0]] }}}',
-		[
-			this.title
-		]
-	);},
+		if(visionS != ''){
+			note += ' | [['+visionS+']]';
+			var visionT = store.getTiddler(visionS);
+			if(visionT){
+				var whydoS = visionT.getParent("WhyDoes");
+				note += ' | [['+whydoS+']]';
+			}
+		}
+		
+		controls['note'] = note;
+		return controls;
+	},
+	
+	render_Tickler: function() {
+		return this.renderGenericControls(this.getTicklerControls());
+	},
+	
+	getTicklerControls: function() {
+		controls = this.getDefaultControls();
+		
+		controls['css'] = "tickler";
+		var repeatType = this.getByIndex('TicklerRepeatType');
+		if (repeatType.length == 0 || repeatType.contains('Once')) {
+			// show normal done checkbox
+			controls['done'] = '<<toggleTag Actioned [[%0]] ->>';
+		}
+		else if (repeatType.contains('Daily'))       { controls['done'] = '<<addDay [[%0]]>>' }
+		else if (repeatType.contains('WorkWeekly'))  { controls['done'] = '<<addDayWW [[%0]]>>' }
+		else if (repeatType.contains('Weekly'))      { controls['done'] = '<<addWeek [[%0]]>>' }
+		else if (repeatType.contains('Fortnightly')) { controls['done'] = '<<addFortnight [[%0]]>>' }
+		else if (repeatType.contains('Monthly'))     { controls['done'] = '<<addMonth [[%0]]>>' }
+		else if (repeatType.contains('Bimonthly'))   { controls['done'] = '<<addBimonth [[%0]]>>' }
+		else if (repeatType.contains('Halfyearly'))  { controls['done'] = '<<addHalfyear [[%0]]>>' }
+		else if (repeatType.contains('Yearly'))      { controls['done'] = '<<addYear [[%0]]>>' }
+		
+		controls['state'] = '<<dateChooser [[%0]]>>';
+		
+		return controls;
+	},
+	
+	render_Project: function() {
+		return this.renderGenericControls(this.getProjectControls());
+	},
+	
+	getProjectControls: function() {
+		controls = this.getDefaultControls();
+		
+		controls['css'] = "project";
+		controls['done'] = '<<toggleTag Complete [[%0]] ->>';
+		controls['state'] = '<<multiToggleTag tag:ProjectStatus title:[[%0]]>>';			
+		controls['note'] += ' '+this.modified.prettyDate();
+		
+		return controls;
+	},
 
-	render_ProjectBare: function() { return this.renderUtil(
-		'{{project{'+
-		//'&lt;&lt;multiSelectTag tag:Project title:[[%0]]&gt;&gt;'+
-		//'&lt;&lt;multiCheckboxTag tag:ActionStatus title:[[%0]]&gt;&gt;'+
-		'&lt;&lt;singleToggleTag tag:Starred title:[[%0]]&gt;&gt;'+
-		'&amp;nbsp;[[%0]] }}}',
-		[
-			this.title
-		]
-	);},
+	render_link: function() {
 
-	render_ActionProj: function() {
+		var pLink = '';
+		var link = store.getTiddlerSlice(this.title, "link");
+		if (link){
+			pLink += '[[link|'+link+']]'
+		}
 
-		// actually it's not going to be easy to have
-		// an action in more than one project
-		// but just in case....
-		var pLink = &quot;&quot;;
-		this.getByIndex(&quot;Project&quot;).each(function(p){
-			// shows just the P
-			pLink += &quot; [/%%/[[P|&quot;+p+&quot;]]]&quot;;
-			// shows entire project
-			//pLink += &quot; [/%%/[[&quot;+p+&quot;]]]&quot;;
-		});
-
-       		return this.renderUtil(
-		'{{action{'+
-		'&lt;&lt;toggleTag Done [[%0]] -&gt;&gt;'+
-		'&lt;&lt;multiToggleTag tag:ActionStatus title:[[%0]]&gt;&gt;'+
-		'&lt;&lt;singleToggleTag tag:Starred title:[[%0]]&gt;&gt;'+
-		' &amp;nbsp;[[%0]] %1}}}',
+		return this.renderUtil(
+		'{{plain{[[%0]]}}} %1',
 		[
 			this.title,
 			pLink
 		]
 	);},
 
-	render_DoneAction: function() { return this.renderUtil(
-		'{{action{'+
-		'&lt;&lt;toggleTag Done [[%0]] -&gt;&gt;'+
-		' [[%0]] }}}',
+	render_note: function() { return this.renderUtil(
+		"[[%0]]"+' ~~<<tiddler [[%0::note]]>>~~',
 		[
 			this.title
 		]
-	);},
+	);},//Start Added by Dossc - Tickler Group view for LandscapeTab
 
-	render_ProjectHeading: function() { return this.renderUtil(
-		'{{project{'+
-		'[[%0]] '+
-		'&lt;&lt;toggleTag Complete [[%0]] -&gt;&gt;'+
-		'@@font-size:80%;&lt;&lt;multiToggleTag tag:ProjectStatus title:[[%0]]&gt;&gt;@@'+
-		'&lt;&lt;singleToggleTag tag:Starred title:[[%0]]&gt;&gt;'+
- 		'}}}',
+	render_Tick: function() {
+		var repeatType = this.getByIndex('TicklerRepeatType');
+		var doneControl = "";
+		if (repeatType.length == 0 || repeatType.contains('Once')) {
+			// show normal done checkbox
+			doneControl = '<<toggleTag Actioned [[%0]] ->>';
+		}
+		else if (repeatType.contains('Daily'))       { doneControl = '<<addDay [[%0]]>>' }
+		else if (repeatType.contains('WorkWeekly'))  { doneControl = '<<addDayWW [[%0]]>>' }//Added by Dossc - button for WorkWeekly TicklerRepeatType
+		else if (repeatType.contains('Weekly'))      { doneControl = '<<addWeek [[%0]]>>' }
+		else if (repeatType.contains('Fortnightly')) { doneControl = '<<addFortnight [[%0]]>>' }
+		else if (repeatType.contains('Monthly'))     { doneControl = '<<addMonth [[%0]]>>' }
+		else if (repeatType.contains('Bimonthly'))   { doneControl = '<<addBimonth [[%0]]>>' }//Added by Dossc - bimonthly for WorkWeekly TicklerRepeatType
+		else if (repeatType.contains('Halfyearly'))  { doneControl = '<<addHalfyear [[%0]]>>' }//Added by Dossc - halfyearly for WorkWeekly TicklerRepeatType
+		else if (repeatType.contains('Yearly'))      { doneControl = '<<addYear [[%0]]>>' }
+
+		return this.renderUtil(
+		'{{tickler{'+'%1'+  
+		'&nbsp;[[%0]]'+
+		'}}}',
 		[
-			this.title
+			this.title,
+            doneControl.format([this.title])
 		]
-	);},
+	);},//End Added by Dossc
 
-	render_Context: function() { return this.renderUtil(
-		'[[%0]]',
-		[
-			this.title
-		]
-	);},
+	render_star: function() { 
+		var pLink = '';
+		var link = store.getTiddlerSlice(this.title, "link");
+		if (link){
+			pLink += '[[link|'+link+']]'
+		}
 
-	render_plain: function() { return this.renderUtil(
-		'[[%0]]',
+		return this.renderUtil(
+		'{{plain{'+
+		'<<singleToggleTag tag:Starred title:[[%0]]>>'+
+		'[[%0]]}}} %1',
+		//'{{notesLink{<<showNotesIcon [[%0]]>>}}}',//Removed by Dossc - takes a long time to render references; remember to move the coma
 		[
-			this.title
+			this.title,
+			pLink //Added by Dossc - add link to refrences for More Wiki Functions
 		]
 	);}
-
-
 
 });
 

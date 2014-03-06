@@ -1,0 +1,1 @@
+<<mgtdList title:'[[Non Starred Projects by Area]]'	startTag:Project	tags:'!Starred && Active && !Complete'	view:Generic	sort:Priority	group:Area	gView:GenericGroup	gSort:prioritySlice	mode:global	newButtonTags:'Project Active'>>

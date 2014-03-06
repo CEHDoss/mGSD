@@ -254,11 +254,39 @@ merge(Array.prototype,{
     }).join("\n");
   },
 
+  formatAreaOrProject: function(t) {
+    var projectT = t.getParent("Project");
+	if(projectT != ""){
+	  return projectT;
+	}else{
+	  var areaT = t.getParent("Area");
+	  if(areaT != ""){
+		return areaT;
+	  }else{
+		return store.getTiddler("(No Project)");
+	  }
+	}
+  },
+
+  formatTickleDate: function(t) {
+    var date = Date.convertFromYYYYMMDDHHMM(t.fields['mgtd_date'])
+	var diff = date - new Date();
+	if(diff < 0) diff = 0;
+	var days = Math.ceil(diff/86400000)+'';
+	var padDays = days.length < 2?"0"+days:days;
+	var desc = '  ';
+	if(days < 1)desc += 'Today';
+	else if(days < 2)desc += 'Tommorrow';
+	else desc += config.messages.dates.days[date.getDay()];
+	return [padDays+desc];
+  },
+
   renderGrouped: function(listRenderMethod,headingRenderMethod,noneHeading,renderOptions,groupCountOnly,nbTags) {
     // do I ever use renderOptions??
     // this lost some elegance when I shoehorned the groupCountOnly part in. todo refactor
     // then lost some more with the nbTags addition...
     // might need some reworking
+    // Dossc I guess I made it even worse with starred for More Wiki Functions
     var result = "";
     this.each(function(g) {
       var groupName = g[0];
@@ -269,6 +297,7 @@ merge(Array.prototype,{
         showCount = groupItems.length > 0 ? " ("+groupItems.length+")" : "";
 
       var makeHeading = (groupCountOnly&&groupCountOnly!="") ? "" : "!!";
+      if(groupCountOnly && groupCountOnly == "starred")makeHeading = "!!";//Added by Dossc - added !! when groupCountOnly: starred for More Wiki Functions
       var newButtonMarkup = "";
 
       // this sucks
@@ -290,6 +319,15 @@ merge(Array.prototype,{
       }
       if (!groupCountOnly || groupCountOnly == "")
         result = result + groupItems.render(listRenderMethod,renderOptions) + "\n";
+      //Start Added by Dossc - render starred items with groupCountOnly:starred for More Wiki Functions
+      else if(groupCountOnly && groupCountOnly == "starred"){
+        var starredItems = [];
+        groupItems.each(function(t) {
+          if(t.isStarred())starredItems.push(t);
+        });
+        result = result + starredItems.render(listRenderMethod,renderOptions) + "\n";
+      }
+      //End Added by Dossc
     });
 
     if (groupCountOnly && groupCountOnly != "")

@@ -1,0 +1,9 @@
+|''DuplicateSource''|Sprint 6|
+<<forEachTiddler
+where 'tiddler.isTagged(name()) && tiddler.isTagged("Action")'
+sortBy 'tiddler.modified'
+script 'function name(){return store.getTiddlerSlice("DuplicateProject", "DuplicateSource")}'
+write '"."+tiddler.title.replace(/ \(\d+\)/i,"")+("|"+tiddler.tags.join("|")).replace("|"+name(), "").replace("|Done","").replace("|Waiting For", "|W").replace("|Starred","|S")+"\n"'
+begin '"{{{\n"+name()+" - Duplicate"+("|"+store.getTiddler(name()).tags.join("|")).replace("|Complete","").replace("|Starred","|S")+"\n"'
+end '"}}}\n"'
+>>

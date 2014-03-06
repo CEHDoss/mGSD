@@ -4,7 +4,7 @@ require 'pathname'
 Dir.chdir Pathname.new(File.dirname(__FILE__)).realpath
 
 #$LOAD_PATH.unshift("../r4tw") 
-require 'r4tw'
+require './r4tw'
 require 'fileutils'
 
 $version_number = '3.1.9';
@@ -39,17 +39,26 @@ required = [
 ]
 
 initial = [
-	['Work',          'Realm',         "order:1\npriority:1"],
-	['Personal',      'Realm',         "order:2\npriority:2"],
+	['All',           'Realm',         "order:0\npriority:0\naddTag:Professional,Personal,Fun,GTD"],
+	['Professional',  'Realm',         "order:1\npriority:1\nbutton:Pro\naddTag:GTD"],
+	['Personal',      'Realm',         "order:2\npriority:2\nbutton:Per\naddTag:GTD"],
+	['Fun',           'Realm',         "order:3\npriority:3"],
+	['GTD',           'Realm',         ""],
 
-	['Home Maintenance', 'Area Personal'],
-	['Recreation',       'Area Personal'],
-	['Family',       'Area Personal'],
-	['Friends',       'Area Personal'],
-	['Budget',       'Area Work'],
-	['Research',       'Area Work'],
-	['Training',       'Area Work'],
-	['Customer Relations',       'Area Work'],
+	['Collect',            'Area GTD',  "priority:1"],
+	['Process',            'Area GTD',  "priority:2"],
+	['Organize',           'Area GTD',  "priority:3"],
+	['Review',             'Area GTD',  "priority:4"],
+	['Do',                 'Area GTD',  "priority:5"],
+
+	['Home Maintenance',   'Area Personal'],
+	['Recreation',         'Area Personal'],
+	['Family',             'Area Personal'],
+	['Friends',            'Area Personal'],
+	['Budget',             'Area Professional'],
+	['Research',           'Area Professional'],
+	['Training',           'Area Professional'],
+	['Customer Relations', 'Area Professional'],
 
  	['Weekend',       'Context'],
 	['Call',          'Context'],
@@ -64,6 +73,9 @@ initial = [
 ]
 
 demo = [
+
+  ['Goal', 'Horizon'],
+  ['Vision', 'Horizon'],
 
   ['Bert',           "Contact"],
   ['Ernie',          "Contact"],
@@ -136,6 +148,37 @@ make_tw {
     get_tiddler(File.basename(t,'.tiddler')).add_tag('View')
   end
 
+  add_tiddlers_from_dir("globalviews_process").each do |t|
+    get_tiddler(File.basename(t,'.tiddler')).add_tag('View').add_tag('Process')
+  end
+
+  add_tiddlers_from_dir("globalviews_process_starred").each do |t|
+    get_tiddler(File.basename(t,'.tiddler')).add_tag('View').add_tag('Process').add_tag('Starred')
+  end
+
+  add_tiddlers_from_dir("globalviews_organize").each do |t|
+    get_tiddler(File.basename(t,'.tiddler')).add_tag('View').add_tag('Organize')
+  end
+
+  add_tiddlers_from_dir("globalviews_organize_starred").each do |t|
+    get_tiddler(File.basename(t,'.tiddler')).add_tag('View').add_tag('Organize').add_tag('Starred')
+  end
+
+  add_tiddlers_from_dir("globalviews_review").each do |t|
+    get_tiddler(File.basename(t,'.tiddler')).add_tag('View').add_tag('Review')
+  end
+
+  add_tiddlers_from_dir("globalviews_review_starred").each do |t|
+    get_tiddler(File.basename(t,'.tiddler')).add_tag('View').add_tag('Review').add_tag('Starred')
+  end
+
+  add_tiddlers_from_dir("globalviews_do").each do |t|
+    get_tiddler(File.basename(t,'.tiddler')).add_tag('View').add_tag('Do')
+  end
+
+  add_tiddlers_from_dir("globalviews_do_starred").each do |t|
+    get_tiddler(File.basename(t,'.tiddler')).add_tag('View').add_tag('Do').add_tag('Starred')
+  end
 
   # generate some content
   content = ""
@@ -186,7 +229,7 @@ make_tw {
 
   FileUtils.mkdir('upload') unless File.exist?('upload')
 
-  store_to_file          "upload/upgrade3.html" unless ARGV[0] == 'fast'
+  store_to_file          "./upload/upgrade.html" unless ARGV[0] == 'fast'
 
   # put it back again
   add_tiddler(temp1)
@@ -199,11 +242,11 @@ make_tw {
   # add some intial useful contexts realms and areas and write an empty file.
   add_tiddler(get_tiddler('MptwBlue').copy_to('ColorPalette'))
   initial.each { |t| add_tiddler_from_scratch('tiddler' => t[0], 'tags' => t[1], 'text' => t[2]||'') }
-  get_tiddler('MgtdSettings').add_tags(['Work', 'Personal', 'AlertsIgnoreRealm', 'MultipleContexts']) # default both realms on..
+  get_tiddler('MgtdSettings').add_tags(['All', 'Professional', 'Personal', 'Fun', 'GTD', 'MultipleContexts']) # default both realms on..
   get_tiddler('MgtdSettings').fields['ticklerdateformat'] = 'ddd, DD-mmm-YY'; # set default tickler date format. gotcha: use lowercase only for fields please.
   get_tiddler('MgtdSettings').fields['newjournaldateformat'] = 'ddd DD-mmm-YY, 0hh:0mm'; # set default tickler date format. gotcha: use lowercase only for fields please.
   get_tiddler('MgtdSettings').fields['tickleractivatehour'] = '5'; # set default tickler date format. gotcha: use lowercase only for fields please.
-  to_file          "upload/empty3.html" unless ARGV[0] == 'fast'
+  to_file          "upload/empty.html" unless ARGV[0] == 'fast'
 
   # load the demo and write a demo file
   demo.each { |t| add_tiddler_from_scratch('tiddler' => t[0], 'tags' => t[1], 'text' => t[2]||'') }
@@ -227,9 +270,7 @@ http://previous.townsville.qld.gov.au/theatre/TheatreSeason.asp
   #
   #######################
 
-  to_file                "upload/demo3.html"
+  to_file                "upload/demo.html"
 }
 
-
-`cp upload/upgrade3.html ~/GTD`
 
