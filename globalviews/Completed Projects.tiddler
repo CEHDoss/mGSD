@@ -1,7 +1,7 @@
 <<mgtdList
 	title:'Complete'
 	mode:global
-	startTag:Project
+	startTag:Focus
 	tags:'Complete'
 	view:ProjectComplete
 	group:day

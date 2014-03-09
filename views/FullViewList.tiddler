@@ -3,7 +3,7 @@
 	startTag:View
 	view:Generic
 	sort:orderSlice
-	group:Area
+	group:Focus
 	gView:GenericGroup
 	gSort:prioritySlice
 	mode:global

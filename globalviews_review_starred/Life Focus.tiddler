@@ -26,9 +26,9 @@
 	newButtonTags:'Project Starred'
 	dontShowEmpty:yes
 	mode:global
-	group:AreaOrProject
+	group:Focus
 	gView:GenericGroup
-	startTag:Project
+	startTag:Focus
 	view:Generic
 	sort:Vision
 	tags:'!Complete && Active && !Goal'
@@ -36,7 +36,7 @@
 >><<mgtdList title:'Visions and actions'
 	mode:global
 	groupCountOnly:starred
-	group:Area
+	group:Focus
 	gView:GenericGroup
 	gSort:Vision
 	gWhere:'tiddler.hasParent("Vision")'

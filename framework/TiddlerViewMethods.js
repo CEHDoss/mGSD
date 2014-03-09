@@ -34,16 +34,10 @@ merge(Tiddler.prototype,{
     getGenericControls: function() {
         if (this.hasTag("Action")){
             return this.getActionControls();
-        } else if(this.hasTag("Project")){
-            return this.getProjectControls();
+        } else if(this.hasTag("Focus")){
+            return this.getFocusControls();
         } else if(this.hasTag("Tickler")){
             return this.getTicklerControls();
-        } else if(this.hasTag("Area")){
-            return this.getAreaControls();
-        } else if(this.hasTag("Goal")){
-            return this.getAreaControls();
-        } else if(this.hasTag("Vision")){
-            return this.getAreaControls();
         }// else
         return this.getDefaultControls();
     },
@@ -53,11 +47,8 @@ merge(Tiddler.prototype,{
         var link = "";
         var note = "";
 
-        if (config.mGTD.getOptChk('FullAreaInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Area [[title]] [[%0]]>>}}}".format([this.title]); }
-        else { pLink += "{{projLink{<<linkToParent Area '[A]' [[%0]]>>}}}".format([this.title]); }
-
-        if (config.mGTD.getOptChk('FullProjectInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Project [[title]] [[%0]]>>}}}".format([this.title]); }
-        else { pLink += "{{projLink{<<linkToParent Project '[P]' [[%0]]>>}}}".format([this.title]); }
+        if (config.mGTD.getOptChk('FullFocusInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Focus [[title]] [[%0]]>>}}}".format([this.title]); }
+        else { pLink += "{{projLink{<<linkToParent Focus '[F]' [[%0]]>>}}}".format([this.title]); }
 
         if (config.mGTD.getOptChk('FullContactInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Contact [[title]] [[%0]]>>}}}".format([this.title]);    }
         else { pLink += "{{projLink{<<linkToParent Contact '[C]' [[%0]]>>}}}".format([this.title]); }
@@ -120,30 +111,6 @@ merge(Tiddler.prototype,{
         return controls;
     },
     
-    render_Area: function() {
-        return this.renderGenericControls(this.getAreaControls());
-    },
-    
-    getAreaControls: function() {
-        controls = this.getDefaultControls();
-        
-        var note = controls['note'];
-        
-        var visionS = this.getParent("Vision");
-
-        if(visionS != ''){
-            note += ' | [['+visionS+']]';
-            var visionT = store.getTiddler(visionS);
-            if(visionT){
-                var whydoS = visionT.getParent("WhyDoes");
-                note += ' | [['+whydoS+']]';
-            }
-        }
-        
-        controls['note'] = note;
-        return controls;
-    },
-    
     render_Tickler: function() {
         return this.renderGenericControls(this.getTicklerControls());
     },
@@ -157,30 +124,30 @@ merge(Tiddler.prototype,{
             // show normal done checkbox
             controls['done'] = '<<toggleTag Actioned [[%0]] ->>';
         }
-        else if (repeatType.contains('Daily'))       { controls['done'] = '<<addDay [[%0]]>>' }
-        else if (repeatType.contains('WorkWeekly'))  { controls['done'] = '<<addDayWW [[%0]]>>' }
-        else if (repeatType.contains('Weekly'))      { controls['done'] = '<<addWeek [[%0]]>>' }
-        else if (repeatType.contains('Fortnightly')) { controls['done'] = '<<addFortnight [[%0]]>>' }
-        else if (repeatType.contains('Monthly'))     { controls['done'] = '<<addMonth [[%0]]>>' }
-        else if (repeatType.contains('Bimonthly'))   { controls['done'] = '<<addBimonth [[%0]]>>' }
-        else if (repeatType.contains('Halfyearly'))  { controls['done'] = '<<addHalfyear [[%0]]>>' }
-        else if (repeatType.contains('Yearly'))      { controls['done'] = '<<addYear [[%0]]>>' }
+        else if (repeatType.contains('Daily'))       { controls['done'] = '<<addDay [[%0]]>>'; }
+        else if (repeatType.contains('WorkWeekly'))  { controls['done'] = '<<addDayWW [[%0]]>>'; }
+        else if (repeatType.contains('Weekly'))      { controls['done'] = '<<addWeek [[%0]]>>'; }
+        else if (repeatType.contains('Fortnightly')) { controls['done'] = '<<addFortnight [[%0]]>>'; }
+        else if (repeatType.contains('Monthly'))     { controls['done'] = '<<addMonth [[%0]]>>'; }
+        else if (repeatType.contains('Bimonthly'))   { controls['done'] = '<<addBimonth [[%0]]>>'; }
+        else if (repeatType.contains('Halfyearly'))  { controls['done'] = '<<addHalfyear [[%0]]>>'; }
+        else if (repeatType.contains('Yearly'))      { controls['done'] = '<<addYear [[%0]]>>'; }
         
         controls['state'] = '<<dateChooser [[%0]]>>';
         
         return controls;
     },
     
-    render_Project: function() {
-        return this.renderGenericControls(this.getProjectControls());
+    render_Focus: function() {
+        return this.renderGenericControls(this.getFocusControls());
     },
     
-    getProjectControls: function() {
+    getFocusControls: function() {
         controls = this.getDefaultControls();
         
         controls['css'] = "project";
         controls['done'] = '<<toggleTag Complete [[%0]] ->>';
-        controls['state'] = '<<multiToggleTag tag:ProjectStatus title:[[%0]]>>';            
+        controls['state'] = '<<multiToggleTag tag:FocusStatus title:[[%0]]>>';            
         controls['note'] += ' '+this.modified.prettyDate();
         
         return controls;
@@ -191,7 +158,7 @@ merge(Tiddler.prototype,{
         var pLink = '';
         var link = store.getTiddlerSlice(this.title, "link");
         if (link){
-            pLink += '[[link|'+link+']]'
+            pLink += '[[link|'+link+']]';
         }
 
         return this.renderUtil(
@@ -224,14 +191,14 @@ merge(Tiddler.prototype,{
             // show normal done checkbox
             doneControl = '<<toggleTag Actioned [[%0]] ->>';
         }
-        else if (repeatType.contains('Daily'))       { doneControl = '<<addDay [[%0]]>>' }
-        else if (repeatType.contains('WorkWeekly'))  { doneControl = '<<addDayWW [[%0]]>>' }//Added by Dossc - button for WorkWeekly TicklerRepeatType
-        else if (repeatType.contains('Weekly'))      { doneControl = '<<addWeek [[%0]]>>' }
-        else if (repeatType.contains('Fortnightly')) { doneControl = '<<addFortnight [[%0]]>>' }
-        else if (repeatType.contains('Monthly'))     { doneControl = '<<addMonth [[%0]]>>' }
-        else if (repeatType.contains('Bimonthly'))   { doneControl = '<<addBimonth [[%0]]>>' }//Added by Dossc - bimonthly for WorkWeekly TicklerRepeatType
-        else if (repeatType.contains('Halfyearly'))  { doneControl = '<<addHalfyear [[%0]]>>' }//Added by Dossc - halfyearly for WorkWeekly TicklerRepeatType
-        else if (repeatType.contains('Yearly'))      { doneControl = '<<addYear [[%0]]>>' }
+        else if (repeatType.contains('Daily'))       { doneControl = '<<addDay [[%0]]>>'; }
+        else if (repeatType.contains('WorkWeekly'))  { doneControl = '<<addDayWW [[%0]]>>'; }//Added by Dossc - button for WorkWeekly TicklerRepeatType
+        else if (repeatType.contains('Weekly'))      { doneControl = '<<addWeek [[%0]]>>'; }
+        else if (repeatType.contains('Fortnightly')) { doneControl = '<<addFortnight [[%0]]>>'; }
+        else if (repeatType.contains('Monthly'))     { doneControl = '<<addMonth [[%0]]>>'; }
+        else if (repeatType.contains('Bimonthly'))   { doneControl = '<<addBimonth [[%0]]>>'; }//Added by Dossc - bimonthly for WorkWeekly TicklerRepeatType
+        else if (repeatType.contains('Halfyearly'))  { doneControl = '<<addHalfyear [[%0]]>>'; }//Added by Dossc - halfyearly for WorkWeekly TicklerRepeatType
+        else if (repeatType.contains('Yearly'))      { doneControl = '<<addYear [[%0]]>>'; }
 
         return this.renderUtil(
         '{{tickler{'+'%1'+  
@@ -247,7 +214,7 @@ merge(Tiddler.prototype,{
         var pLink = '';
         var link = store.getTiddlerSlice(this.title, "link");
         if (link){
-            pLink += '[[link|'+link+']]'
+            pLink += '[[link|'+link+']]';
         }
 
         return this.renderUtil(

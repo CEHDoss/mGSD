@@ -2,7 +2,7 @@
 	newButtonTags:'Project Active Starred'
 	dontShowEmpty:yes
 	mode:global
-	startTag:Project
+	startTag:Focus
 	view:Generic
 	sort:title
 	tags:'Active && !Complete && Starred'

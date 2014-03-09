@@ -3,26 +3,24 @@
 <div class="projectcontrols controls controlstint">
  <div style="float:right;" class="smaller">
   <span class="label">Realm:</span><span macro="multiSelectTag Realm allowNone:on"></span>
-  <span macro="tag Project"></span><span macro="help Project"></span>
+  <span macro="help Project"></span>
  </div>
  <div>
   <span macro="toggleTag Complete . -"></span>
   <span class='title' macro='view title'></span>
-  <span macro="miniTag"></span>
-  <span macro="linkToParent Area '[A]'"></span>
-  <span macro="linkToParent Project '[P]'"></span>
+  <span macro="linkToParent Focus '[F]'"></span>
   <span macro="singleToggleTag tag:Starred"></span>
-  [[MonkeyGTDTheme##Subtitle]]
+  [[WorkTimeTheme##Subtitle]]
  </div>
  <div macro="hideWhenTagged Complete" style="padding-top:0.25em;padding-bottom:0.25em;">
-  <span macro="multiToggleTag ProjectStatus longVersion:on"></span>
-  <span macro="folderButtons longVersion:on"></span>
+  <span macro="multiToggleTag FocusStatus longVersion:on"></span>
+  <span class="floatright" macro="addMissingFocus"></span>
   <span class="floatright" macro="convertToFromTickler"></span>
   <span class="floatright" macro="deleteAllTagged 'delete project' '' 'delete'"></span>
  </div>
  <div>
-  <div class="floatleft"><span class="label">Area:</span><br><span macro="multiSelectTag Area allowNone:on"></span><span macro="linkToParent Area"></span></div>
-  <div class="floatleft"><span class="label">Subproject of</span>:<br><span macro="multiSelectTag Project allowNone:on"></span><span macro="linkToParent Project"></span></div>
+  <div class="floatleft"><span class="label">Horizon:</span><br><span macro="multiSelectTag Horizon"></span></div>
+  <div class="floatleft"><span class="label">Focus</span>:<br><span macro="multiSelectTag Focus allowNone:on"></span><span macro="linkToParent Focus"></span></div>
   <div class="floatleft"><span class="label">Associated contact</span>:<br><span macro="multiSelectTag Contact allowNone:on"></span><span macro="linkToParent Contact"></span></div>
   <div class="clearboth"></div>
  </div>
@@ -40,14 +38,12 @@
   <span macro="toggleTag Done . -"></span>
   <span class='title' macro='view title'></span>
   <span macro="miniTag"></span>
-  <span macro="linkToParent Area '[A]'"></span>
-  <span macro="linkToParent Project '[P]'"></span>
+  <span macro="linkToParent Focus '[F]'"></span>
   <span macro="singleToggleTag tag:Starred"></span>
-  [[MonkeyGTDTheme##Subtitle]]
+  [[WorkTimeTheme##Subtitle]]
  </div>
  <div macro="hideWhenTagged Done" style="padding-top:0.25em;padding-bottom:0.25em;">
   <span macro="multiToggleTag ActionStatus longVersion:on"></span>
-  <span macro="folderButtons longVersion:on"></span>
   <span class="floatright" macro="convertToFromTickler"></span>
   <span class="floatright" macro="convertActionToSubProj"></span>
   <span class="floatright" macro="convertActionToReference"></span>
@@ -57,8 +53,7 @@
  </div>
  <div>
   <div class="floatleft" macro="else"><span class="label">Context:</span><br/><span macro="multiSelectTag Context allowNone:on"></span><span macro="linkToParent Context"></span></div>
-  <div macro="hideWhen tiddler.hasParent('Area')" class="floatleft"><span class="label">Project:</span><br/><span macro="multiSelectTag Project allowNone:on"></span><span macro="linkToParent Project"></span></div>
-  <div macro="hideWhen tiddler.hasParent('Project')" class="floatleft"><span class="label">Area:</span><br><span macro="multiSelectTag Area allowNone:on"></span><span macro="linkToParent Area"></span></div>
+  <div class="floatleft"><span class="label">Focus:</span><br/><span macro="multiSelectTag Focus allowNone:on"></span><span macro="linkToParent Focus"></span></div>
   <br style="clear:left"/>
   <div class="floatleft">
     <span class="label">Depends on:</span><br/><span macro="multiSelectTag Action allowNone:on"></span><span macro="linkToParent Action"></span>
@@ -94,10 +89,9 @@
   <span macro="showWhenTagged 'Halfyearly'"   ><span macro="addHalfyear"></span></span><!-- Added by Dossc - hy button for WorkWeekly TicklerRepeatType//-->
   <span macro="showWhenTagged 'Yearly'"  ><span macro="addYear"></span></span>
   <span class='title' macro='view title'></span>
-  <span macro="linkToParent Area '[A]'"></span>
-  <span macro="linkToParent Project '[P]'"></span>
+  <span macro="linkToParent Focus '[F]'"></span>
   <span macro="singleToggleTag tag:Starred"></span>
-  [[MonkeyGTDTheme##Subtitle]]
+  [[WorkTimeTheme##Subtitle]]
  </div>
  <div macro="hideWhenTagged Actioned" style="padding-top:0.25em;padding-bottom:0.25em;">
   <span macro="multiToggleTag TicklerRepeatType longVersion:on"></span>
@@ -117,8 +111,7 @@
   <div class="clearboth"></div>
  </div>
  <div>
-  <div class="floatleft"><span class="label">Project:</span><br/><span macro="multiSelectTag Project allowNone:on"></span><span macro="linkToParent Project"></span></div>
-  <div macro="hideWhen tiddler.hasParent('Project')" class="floatleft"><span class="label">Area:</span><br><span macro="multiSelectTag Area allowNone:on"></span><span macro="linkToParent Area"></span></div>
+  <div class="floatleft"><span class="label">Focus:</span><br/><span macro="multiSelectTag Focus allowNone:on"></span><span macro="linkToParent Focus"></span></div>
   <div class="floatleft"><span class="label">Associated contact</span>:<br><span macro="multiSelectTag Contact allowNone:on"></span><span macro="linkToParent Contact"></span></div>
   <div class="clearboth"></div>
  </div>
@@ -150,18 +143,38 @@
 </div>
 <!--}}}-->
 
+!Value
+[[TitleButtons##Area]]
+
+!Vision
+[[TitleButtons##Area]]
+
+!Goal
+[[TitleButtons##Area]]
+
 !Area
 <!--{{{-->
-<div class="areacontrols controls">
+<div class="areacontrols controls controlstint">
  <div style="float:right;" class="smaller">
   <span class="label">Realm:</span><span macro="multiSelectTag Realm allowNone:on"></span>
-  <span macro="tag Area"></span><span macro="help Area"></span>
+  <span macro="help Area"></span>
  </div>
  <div>
+  <span macro="toggleTag Complete . -"></span>
   <span class='title' macro='view title'></span>
-  <span macro="miniTag"></span>
+  <span macro="linkToParent Focus '[F]'"></span>
   <span macro="singleToggleTag tag:Starred"></span>
-  <span macro="multiSelectTag Vision allowNone:on"></span><span macro="linkToParent Vision"></span><!--Added by Dossc - goal selection box for SixLevelModel //-->
+  [[WorkTimeTheme##Subtitle]]
+ </div>
+ <div style="padding-top:0.25em;padding-bottom:0.25em;">
+  <div macro="hideWhenTagged Complete">
+   <span class="floatright" macro="addMissingFocus"></span>
+   <span class="floatright" macro="convertToFromTickler"></span>
+   <span class="floatright" macro="deleteAllTagged 'delete project' '' 'delete'"></span>
+  </div>
+  <div class="floatleft"><span class="label">Horizon:</span><br><span macro="multiSelectTag Horizon"></span></div>
+  <div class="floatleft"><span class="label">Focus</span>:<br><span macro="multiSelectTag Focus allowNone:on"></span><span macro="linkToParent Focus"></span></div>
+  <div class="clearboth"></div>
  </div>
 </div>
 <!--}}}-->
@@ -187,14 +200,12 @@
  </div>
  <div>
   <span class='title' macro='view title'></span>
-  <span macro="linkToParent Area '[A]'"></span>
-  <span macro="linkToParent Project '[P]'"></span>
+  <span macro="linkToParent Focus '[F]'"></span>
   <span macro="singleToggleTag tag:Starred"></span>
-  [[MonkeyGTDTheme##Subtitle]]
+  [[WorkTimeTheme##Subtitle]]
  </div>
  <div>
-  <div class="floatleft"><span class="label">Project:</span><br><span macro="multiSelectTag Project allowNone:on"></span><span macro="linkToParent Project"></span></div>
-  <div macro="hideWhen tiddler.hasParent('Project')" class="floatleft"><span class="label">Area:</span><br><span macro="multiSelectTag Area allowNone:on"></span><span macro="linkToParent Area"></span></div>
+  <div class="floatleft"><span class="label">Focus:</span><br><span macro="multiSelectTag Focus allowNone:on"></span><span macro="linkToParent Focus"></span></div>
  </div>
  <div class="clearboth"></div>
  <div style="padding-top:1em;">
@@ -214,7 +225,7 @@
   <span class='title' macro='view title'></span>
   <span macro="miniTag"></span>
   <span macro="singleToggleTag tag:Starred"></span>
-  [[MonkeyGTDTheme##Subtitle]]
+  [[WorkTimeTheme##Subtitle]]
  </div>
 </div>
 <!--}}}-->
@@ -226,7 +237,7 @@
   <span macro="toggleTag Done . -"></span>
   <span class='title' macro='view title'></span>
   <span macro="singleToggleTag tag:Starred"></span>
-  [[MonkeyGTDTheme##Subtitle]]
+  [[WorkTimeTheme##Subtitle]]
   <span class="floatright" macro="scratchQuickAdd"></span>
   <span class="floatright" macro="convertScratchToProject"></span>
   <span class="floatright" macro="convertScratchToAction"></span>

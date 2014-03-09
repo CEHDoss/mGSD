@@ -2,6 +2,7 @@
 	newButtonTags:'Project Active'
 	dontShowEmpty:yes
 	mode:global
+	group:Horizon
 	startTag:Focus
 	view:Generic
 	sort:title

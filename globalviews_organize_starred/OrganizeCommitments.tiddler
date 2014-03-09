@@ -4,10 +4,10 @@
 	mode:global
 	ignoreRealm:yes
 	where:"tiddler.realmMismatchWithParent('Project')||tiddler.realmMismatchWithParent('Area')"
-	group:AreaOrProject
+	group:Focus
 	gView:GenericGroup
 >><<mgtdList title:'Projects with no (Area or Project)'
-	startTag:Project
+	startTag:Focus
 	view:Generic
 	mode:global
 	where:'!tiddler.hasParent("Area") && !tiddler.hasParent("Project")'

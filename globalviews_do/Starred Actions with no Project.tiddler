@@ -1,7 +1,7 @@
 <<mgtdList title:'[[Starred Actions with no Project]]'
 	newButtonTags:'Action Next'
 	mode:global
-	group:Area
+	group:Focus
 	gView:GenericGroup
 	gSort:prioritySlice
 	startTag:Action

@@ -20,19 +20,19 @@ Fix these manually. These have either no realm or a different realm to their par
 
 <<mgtdList
 	title:'Projects/Area mismatch'
-	startTag:Project
+	startTag:Focus
 	view:star
 	mode:global
 	ignoreRealm:yes
 	where:"tiddler.realmMismatchWithParent('Area')"
-	group:Area
+	group:Focus
 	gView:bold
 	>>
 
 
 <<mgtdList
 	title:'Subproject/parent project mismatch'
-	startTag:Project
+	startTag:Focus
 	view:star
 	mode:global
 	ignoreRealm:yes

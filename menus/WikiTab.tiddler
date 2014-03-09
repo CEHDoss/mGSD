@@ -2,7 +2,7 @@
 	newButtonTags:'Reference Starred'
 	groupCountOnly:starred
 	mode:global
-	group:AreaOrProject
+	group:Focus
 	gView:bold
 	gSort:orderSlice
 	view:link

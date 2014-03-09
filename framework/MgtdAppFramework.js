@@ -254,20 +254,6 @@ merge(Array.prototype,{
     }).join("\n");
   },
 
-  formatAreaOrProject: function(t) {
-    var projectT = t.getParent("Project");
-	if(projectT != ""){
-	  return projectT;
-	}else{
-	  var areaT = t.getParent("Area");
-	  if(areaT != ""){
-		return areaT;
-	  }else{
-		return store.getTiddler("(No Project)");
-	  }
-	}
-  },
-
   formatTickleDate: function(t) {
     var date = Date.convertFromYYYYMMDDHHMM(t.fields['mgtd_date'])
 	var diff = date - new Date();

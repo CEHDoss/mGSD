@@ -1,5 +1,5 @@
-<<mgtdList startTag:Project title:'Projects with no area' tags:'!Complete' view:Project mode:global
-	group:ProjectStatus
+<<mgtdList startTag:Horizon title:'Projects with no area' tags:'!Complete' view:Project mode:global
+	group:FocusStatus
 	gView:bold
 	where:tiddler.hasNoParent('Area')
 	>>

@@ -69,7 +69,7 @@ merge(config.macros,{
 
       // if we're in a project inherit the realm from the project
       var inTiddler = store.fetchTiddler(tiddlerTitle);
-      if (inTiddler && inTiddler.tags.contains('Project')) {
+      if (inTiddler && inTiddler.tags.contains('Focus')) {
         // get the realm from the project
         return inTiddler.getByIndex('Realm');
       }
@@ -256,15 +256,7 @@ merge(config.macros,{
 
         var nbExtra = nbTags;
 
-        // also we want an area. another hack. darn you subprojects.. :)
-        if (nbList.contains('Project') && !nbList.containsAny(fastTagged('Area').toTitleList())) {
-          var foo = store.fetchTiddler(tiddlerTitle).getByIndex('Area');
-          if (foo.length > 0) {
-            nbExtra += ' [[' + foo[0] + ']]';
-          }
-        }
-
-        if (nbList.contains('Project') && !nbList.containsAny(fastTagged('ProjectStatus').toTitleList())) {
+        if (nbList.contains('Project') && !nbList.containsAny(fastTagged('FocusStatus').toTitleList())) {
           // stupid hack for subprojects list in project dashboards
           // don't want to create a project with no status
           // this is the hack:
@@ -320,10 +312,7 @@ merge(config.macros,{
         wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle);
             }
       //Start Added by Dossc - detect tickleDate for LandscapeTab
-      else if (groupBy == "AreaOrProject") {
-        theList = theList.groupBy(theList.formatAreaOrProject).reverse();
-        wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle,null,groupCountOnly,nbTags);
-      } else if (groupBy == "tickleDate") {
+      else if (groupBy == "tickleDate") {
         theList = theList.groupBy(theList.formatTickleDate).reverse();
         wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle);
       }

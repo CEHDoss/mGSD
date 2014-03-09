@@ -1,7 +1,7 @@
 <<mgtdList title:FullViewList
 	newButtonTags:'View GTD Starred'
 	mode:global
-	group:Area
+	group:Focus
 	groupCountOnly:starred
 	gView:bold
 	gSort:prioritySlice

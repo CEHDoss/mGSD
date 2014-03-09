@@ -123,6 +123,7 @@ config.indexedTags = {
     },
 
     hasActiveProject: function() {
+    	debugger;
       var projs = this.getByIndex("Project");
 
       if (projs.length == 0)
@@ -132,7 +133,7 @@ config.indexedTags = {
 
       for (var i=0;i<projs.length;i++)
         if (
-          (config.indexedTags.indexes[projs[i]]['ProjectStatus'].contains('Active'))
+          (config.indexedTags.indexes[projs[i]]['FocusStatus'].contains('Active'))
           &&
           !store.fetchTiddler(projs[i]).tags.contains('Complete') // seems stupid
           )
@@ -140,17 +141,17 @@ config.indexedTags = {
       return false;
     },
 
-    hasStarredProject: function() {
+    hasStarredFocus: function() {
       // similar to hasActiveProject
       // thanks to Bernhardt Rainer
-      var projs = this.getByIndex("Project");
+      var projs = this.getByIndex("Focus");
 
       if (projs.length == 0)
         return false;
 
       for (var i=0;i<projs.length;i++)
         if (
-          (config.indexedTags.indexes[projs[i]]['ProjectStatus'].contains('Starred'))
+          (config.indexedTags.indexes[projs[i]]['FocusStatus'].contains('Starred'))
           &&
           !store.fetchTiddler(projs[i]).tags.contains('Complete') // seems stupid
           )
@@ -159,7 +160,7 @@ config.indexedTags = {
     },
 
     hasVision: function() {
-      var projs = this.getByIndex("Area");
+      var projs = this.getByIndex("Focus");
 
       if (projs.length == 0)
         return false;
@@ -173,7 +174,7 @@ config.indexedTags = {
     isStarred: function() {
       if(this.isTagged("Starred"))return true;
 	  //if(!this.isTagged("Action"))return false; //Removed by Dossc - I want to include references
-	  var projs = this.getByIndex("Project");
+	  var projs = this.getByIndex("Focus");
 	  
 	  if (projs.length == 0)
 	    return false;
@@ -192,11 +193,11 @@ config.indexedTags = {
       // also permit multiple projects......
       // explicit:
       var result = [];
-      result = result.concat(this.getByIndex("Area"));
+      result = result.concat(this.getByIndex("Focus"));
       // implicit (via project/s):
-      var projs = this.getByIndex("Project");
+      var projs = this.getByIndex("Focus");
       for (var i=0;i<projs.length;i++)
-        result = result.concat(store.fetchTiddler(projs[i]).getByIndex("Area"));
+        result = result.concat(store.fetchTiddler(projs[i]).getByIndex("Focus"));
       return result;
     },
 
@@ -210,24 +211,17 @@ config.indexedTags = {
       return children.length > 0;
     },
 
-    hasSubProject: function() {
-      var children = fastTagged(this.title).filterByTagExpr('Project && !Complete && Active');
-	  if(children.length <= 0){
-	    children = fastTagged(this.title).filterByTagExpr('Area')
-		for(var i = 0; i < children.length;i++){
-		  if(fastTagged(children[i].title).filterByTagExpr('Project && !Complete').length > 0)return true;
-		}
-		return false;
-	  }else return true;
-	  //return children.length > 0;
+    hasFocus: function() {
+      var children = fastTagged(this.title).filterByTagExpr('Focus && !Complete');
+      return children.length > 0;
     },
 
-    hasNextActionOrSubProject: function() {
-      return (this.hasSubProject() || this.hasNextAction());
+    hasNextActionOrFocus: function() {
+      return (this.hasFocus() || this.hasNextAction());
     },
 
-    hasNextActionOrSubProjectOrTickler: function() {
-      return (this.hasSubProject() || this.hasNextAction() || this.hasTickler());
+    hasNextActionOrFocusOrTickler: function() {
+      return (this.hasFocus() || this.hasNextAction() || this.hasTickler());
     }
   },
 

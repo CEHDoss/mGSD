@@ -65,7 +65,7 @@ merge(Tiddler.prototype,{
   // experimental. does this belong elsewhere?
   actionInArea: function(area) {
     //return this.getParent(area).contains(area) || this.getGrandParent('Project','Area').contains(area);
-    return this.getGrandParent('Project','Area').contains(area);
+    return this.getGrandParent('Focus','Focus').contains(area);
   },
 
 //-----------------------------------
@@ -362,7 +362,7 @@ merge(config.macros,{
         filterRealm += "(tiddler.tags.contains('"+thisRealm.replace(/'/g,"\\'")+"') || !tiddler.hasParent('Realm'))";
       }
 
-      if (tag == "Project") {
+      if (tag == "Focus") {
         // only want to see active projects
         filterComplete += "!tiddler.tags.contains('Complete')";
       }
@@ -370,13 +370,13 @@ merge(config.macros,{
       // Big thanks to Kralik and whoever wrote this: http://tiddlywiki.org/wiki/MonkeyGTD/Customization_Guide/Waiting_Actions
       if (tag == "Action") {
         // only want to see active actions; actions only show other actions in same project (or no project)
-        if (tiddler.hasParent('Project')) {
+        if (tiddler.hasParent('Focus')) {
           // XXX slightly broken for actions with multiple projects. But i can live with it..
           // note: getParent returns an array
-          filterComplete += "(!tiddler.tags.contains('Done') && tiddler.tags.contains('"+tiddler.getParent('Project')[0].replace(/'/g,"\\'")+"'))";
+          filterComplete += "(!tiddler.tags.contains('Done') && tiddler.tags.contains('"+tiddler.getParent('Focus')[0].replace(/'/g,"\\'")+"'))";
         }
         else {
-          filterComplete += "(!tiddler.tags.contains('Done') && !tiddler.hasParent('Project'))";
+          filterComplete += "(!tiddler.tags.contains('Done') && !tiddler.hasParent('Focus'))";
         }
 
       }
@@ -404,7 +404,7 @@ merge(config.macros,{
         filterExpr = "(" + filterExpr + ") || tiddler.title == '" + currentVal.replace(/'/g,"\\'") + "'";
 
       }
-      if (tag == "Project" && tiddler.hasTag('Project')) {
+      if (tag == "Focus" && tiddler.hasTag('Focus')) {
         // special case: don't let a project be a subproject of itself
         filterExpr = "(" + filterExpr + ") && tiddler.title != '" + tiddler.title.replace(/'/g,"\\'") + "'";
       }
@@ -470,7 +470,7 @@ merge(config.macros,{
         tags.push(tag); // make it into the thing you want
         if (realm) // make sure it's got a realm unless it IS a realm
           tags.push(realm);
-        if (tag == "Project")
+        if (tag == "Focus")
           tags.push("Active"); // if it's a project then make it active...
         if (tag == "Action")
           tags.push("Next"); // if it's an action then make it next...
@@ -513,6 +513,20 @@ merge(config.macros,{
     }
   },
 
+  addMissingFocus: {
+    handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+      if (!tiddler.tags.contains('Focus')) {
+        createTiddlyButton(place, "Add Missing Focus", "Add Missing Focus", function(e) {
+            store.suspendNotifications();
+            tiddler.addTag("Focus");
+            store.resumeNotifications();
+            store.notify(tiddler.title,true);
+            return false;
+          });
+      }
+    }
+  },
+
   // these don't really belong here but never mind..
   convertToFromTickler: {
     handler: function(place,macroName,params,wikifier,paramString,tiddler) {
@@ -533,23 +547,29 @@ merge(config.macros,{
             store.suspendNotifications();
             tiddler.removeTag("Tickler");
             tiddler.addTag("Project");
+            tiddler.addTag("Focus");
             tiddler.removeTag("Complete");
-            tiddler.setTagFromGroup("ProjectStatus",'Active');
+            tiddler.setTagFromGroup("FocusStatus",'Active');
             store.resumeNotifications();
             store.notify(tiddler.title,true);
             return false;
           });
       }
-      if (tiddler.tags.containsAny(['Action','Project'])) {
+      if (tiddler.tags.containsAny(['Action','Focus'])) {
         createTiddlyButton(place, "make tickler", "make this item into a tickler", function(e) {
             store.suspendNotifications();
             if (tiddler.hasTag("Project")) {
               // a little trick. it makes any actions associated with this project disappear from action lists
               // thanks to Jorge A. Ramos M.
-              tiddler.setTagFromGroup("ProjectStatus",'Someday/Maybe');
+              tiddler.setTagFromGroup("FocusStatus",'Someday/Maybe');
             }
             tiddler.removeTag("Action");
             tiddler.removeTag("Project");
+            tiddler.removeTag("Area");
+            tiddler.removeTag("Goal");
+            tiddler.removeTag("Vision");
+            tiddler.removeTag("Value");
+            tiddler.removeTag("Focus");
             tiddler.addTag("Tickler");
             if (!tiddler.tags.containsAny(['Daily','Weekly','Monthly','Yearly'])) {
               // thanks Kyle Baker
@@ -574,6 +594,7 @@ merge(config.macros,{
             tiddler.removeTag("Future");
             tiddler.removeTag("Waiting For");
             tiddler.removeTag("Done");
+            tiddler.addTag("Focus");
             tiddler.addTag("Project");
             tiddler.addTag("Active");
             store.resumeNotifications();

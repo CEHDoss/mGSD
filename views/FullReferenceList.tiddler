@@ -1,7 +1,7 @@
 <<mgtdList title:'Full Area Reference List'
 	newButtonTags:'Reference'
 	mode:global
-	group:AreaOrProject
+	group:Focus
 	gView:GenericGroup
 	gSort:prioritySlice
 	startTag:Reference

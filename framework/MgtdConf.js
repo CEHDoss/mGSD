@@ -7,6 +7,9 @@ config.mGTD.specialTags = [
   "Action",
   "Project",
   "Area",
+  "Goal",
+  "Vision",
+  "Value",
   //"Realm",
   "Context",
   "View",
@@ -18,17 +21,17 @@ config.mGTD.specialTags = [
 config.mGTD.tagsToIndex = [
   "Action",   // needed for action dependencies
   "Project",
-  "Area",
+  "Focus",
+  "Horizon",
   "Realm",
   "Context",
   "ActionStatus",
   "TicklerStatus",
-  "ProjectStatus",
+  "FocusStatus",
   "GTDComponent",
   "Sidebar",
   "Contact",
-  "TicklerRepeatType",
-  "Vision"
+  "TicklerRepeatType"
 ];
 
 config.mgtdVersion = "__REV__";

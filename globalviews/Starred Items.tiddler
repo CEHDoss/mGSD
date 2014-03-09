@@ -18,7 +18,7 @@
 {{col{
 
 <<mgtdList title:'Starred Projects' startTag:Starred tags:'Project && !Complete' view:Project mode:global
-	group:ProjectStatus
+	group:FocusStatus
 	gView:bold
 	newButtonTags:'Starred Project'
 	>>

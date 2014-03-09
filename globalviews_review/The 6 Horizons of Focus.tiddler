@@ -91,11 +91,11 @@
 >><<mgtdList title:'Current Projects'
 	newButtonTags:'Project Starred'
 	mode:global
-	group:AreaOrProject
+	group:Focus
 	gView:GenericGroup
 	gSort:prioritySlice
 	groupCountOnly:starred
-	startTag:Project
+	startTag:Focus
 	view:Generic
 	sort:Priority
 	tags:'!Complete && !Goal'
@@ -103,10 +103,10 @@
 	newButtonTags:'Project Starred'
 	dontShowEmpty:yes
 	mode:global
-	group:AreaOrProject
+	group:Focus
 	gView:GenericGroup
 	gSort:prioritySlice
-	startTag:Project
+	startTag:Focus
 	view:Generic
 	sort:Priority
 	tags:'!Complete && Active && !Goal'
@@ -115,7 +115,7 @@
 	newButtonTags:'Action Starred'
 	mode:global
 	groupCountOnly:starred
-	group:Area
+	group:Focus
 	gView:GenericGroup
 	gSort:prioritySlice
 	startTag:Action
@@ -126,7 +126,7 @@
 >><<mgtdList title:'Project - Runway'
 	mode:global
 	groupCountOnly:starred
-	group:Area
+	group:Focus
 	gView:GenericGroup
 	gSort:prioritySlice
 	view:Generic

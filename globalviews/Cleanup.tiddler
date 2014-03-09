@@ -23,7 +23,7 @@ Completed projects older than 14 days. (Delete individually).
 <<mgtdList title:'Completed projects older than 14 days'
 	mode:global
 	sort:-modified
-	startTag:Project
+	startTag:Focus
 	tags:'Complete'
 	view:ProjectComplete
 	where:'tiddler.olderThanDays(14)'

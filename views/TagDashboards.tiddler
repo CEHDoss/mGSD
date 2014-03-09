@@ -46,7 +46,7 @@
 
 	<div macro="mgtdList title:'Active Subprojects' tags:'Project && !Complete' view:Generic
 		ignoreRealm:yes
-		group:ProjectStatus
+		group:FocusStatus
 		gView:GenericGroup
 		newButtonTags:'Project'
 		"></div>
@@ -152,7 +152,7 @@
 
 	<div macro="mgtdList title:'Associated Projects' tags:'Project && !Complete' view:Generic
 		ignoreRealm:yes
-		group:ProjectStatus
+		group:FocusStatus
 		gView:GenericGroup
 		newButtonTags:'Project'
 		"></div>

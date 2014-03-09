@@ -1,5 +1,5 @@
 <<mgtdList title:'[[Non Starred Projects]]'
-	startTag:Project
+	startTag:Focus
 	tags:'!Starred && Active && !Complete'
 	view:Generic
 	mode:global

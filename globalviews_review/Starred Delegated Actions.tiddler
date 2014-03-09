@@ -2,7 +2,7 @@
 	newButtonTags:'Action [(Waiting For)] Starred'
 	dontShowEmpty:yes
 	mode:global
-	group:AreaOrProject
+	group:Focus
 	gView:GenericGroup
 	startTag:Action
 	view:Generic

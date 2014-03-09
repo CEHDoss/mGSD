@@ -12,22 +12,22 @@ $version_number = '3.1.9';
 required = [
 
   ['Action', 'GTDComponent'],
-  ['Project', 'GTDComponent'],
-  ['Area', 'GTDComponent'],
+  ['Focus', 'GTDComponent'],
+  ['Horizon', 'GTDComponent'],
   ['Context', 'GTDComponent'],
   ['Tickler', 'GTDComponent'],
   ['Reference', 'GTDComponent'],
   ['Contact', 'GTDComponent'],
   ['Realm', 'GTDComponent'],
 
-  ['Starred',       ''],
+  ['Starred',       'GTDComponent'],
 
   ['Next',          'ActionStatus',  "order:1\nbutton:n\nbuttonLong:next\n"],
   ['Waiting For',   'ActionStatus',  "order:2\nbutton:w\nbuttonLong:waiting for\n"],
   ['Future',        'ActionStatus',  "order:3\nbutton:f\nbuttonLong:future\n"],
 
-  ['Active',        'ProjectStatus', "order:1\nbutton:a\nbuttonLong:active\n"],
-  ['Someday/Maybe', 'ProjectStatus', "order:2\nbutton:s/m\nbuttonLong:someday/maybe\n"],
+  ['Active',        'FocusStatus', "order:1\nbutton:a\nbuttonLong:active\n"],
+  ['Someday/Maybe', 'FocusStatus', "order:2\nbutton:s/m\nbuttonLong:someday/maybe\n"],
 
   ['Once',        'TicklerRepeatType', "order:1\nbutton:none\nbuttonLong:one time\n"],
   ['Daily',       'TicklerRepeatType', "order:2\nbutton:none\nbuttonLong:daily\n"],
@@ -70,12 +70,15 @@ initial = [
 	['Low Energy',    'Context'],
 	['Reading',       'Context'],
 
+	['Value',   'Horizon', "order:1"],
+	['Vision',  'Horizon', "order:2"],
+	['Goal',    'Horizon', "order:3"],
+	['Area',    'Horizon', "order:4"],
+	['Project', 'Horizon', "order:5"],
+
 ]
 
 demo = [
-
-  ['Goal', 'Horizon'],
-  ['Vision', 'Horizon'],
 
   ['Bert',           "Contact"],
   ['Ernie',          "Contact"],
