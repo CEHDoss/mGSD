@@ -151,10 +151,10 @@ merge(config.macros,{
       var gWhereExpr = getParam(pp,"gWhere","");
 
       // how to render list items
-      var viewType = getParam(pp,"view","plain");
+      var viewType = getParam(pp,"view","Generic");
 
       // how to render headings
-      var gViewType = getParam(pp,"gView",groupBy);
+      var gViewType = getParam(pp,"gView","GenericGroup");
 
       // if there are tiddlers who aren't grouped then give them this title
       // mainly used to label future actions...
@@ -260,7 +260,7 @@ merge(config.macros,{
           // stupid hack for subprojects list in project dashboards
           // don't want to create a project with no status
           // this is the hack:
-          nbExtra += ' Active';
+          nbExtra += ' Active Focus';
         }
 
         // same hack thing for actions
