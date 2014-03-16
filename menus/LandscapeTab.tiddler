@@ -2,6 +2,7 @@
 	startTag:Tickler
 	tags:'!Actioned'
 	sort:'tickleDate'
+	view:Tick
 	group:tickleDate
 	mode:global
 	dontShowEmpty:yes
