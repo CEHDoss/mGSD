@@ -147,8 +147,10 @@ merge(Tiddler.prototype,{
         
         controls['css'] = "project";
         controls['done'] = '<<toggleTag Complete [[%0]] ->>';
-        controls['state'] = '<<multiToggleTag tag:FocusStatus title:[[%0]]>>';            
-        controls['note'] += ' '+this.modified.prettyDate();
+        if(this.hasTag("Project")){
+            controls['state'] = '<<multiToggleTag tag:FocusStatus title:[[%0]]>>';
+            controls['note'] += ' ' + this.modified.prettyDate();
+        }
         
         return controls;
     },
