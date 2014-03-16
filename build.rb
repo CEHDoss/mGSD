@@ -45,20 +45,20 @@ initial = [
 	['Fun',           'Realm',         "order:3\npriority:3"],
 	['GTD',           'Realm',         ""],
 
-	['Collect',            'Area GTD',  "priority:1"],
-	['Process',            'Area GTD',  "priority:2"],
-	['Organize',           'Area GTD',  "priority:3"],
-	['Review',             'Area GTD',  "priority:4"],
-	['Do',                 'Area GTD',  "priority:5"],
+	['Collect',            'Area Focus GTD',  "priority:1"],
+	['Process',            'Area Focus GTD',  "priority:2"],
+	['Organize',           'Area Focus GTD',  "priority:3"],
+	['Review',             'Area Focus GTD',  "priority:4"],
+	['Do',                 'Area Focus GTD',  "priority:5"],
 
-	['Home Maintenance',   'Area Personal'],
-	['Recreation',         'Area Personal'],
-	['Family',             'Area Personal'],
-	['Friends',            'Area Personal'],
-	['Budget',             'Area Professional'],
-	['Research',           'Area Professional'],
-	['Training',           'Area Professional'],
-	['Customer Relations', 'Area Professional'],
+	['Home Maintenance',   'Area Focus Personal'],
+	['Recreation',         'Area Focus Personal'],
+	['Family',             'Area Focus Personal'],
+	['Friends',            'Area Focus Personal'],
+	['Budget',             'Area Focus Professional'],
+	['Research',           'Area Focus Professional'],
+	['Training',           'Area Focus Professional'],
+	['Customer Relations', 'Area Focus Professional'],
 
  	['Weekend',       'Context'],
 	['Call',          'Context'],
@@ -87,21 +87,21 @@ demo = [
   ['Miss Piggy',     "Contact"],
   ['Kermit',         "Contact"],
 
-  ['Mow Lawn',              "Project [[Home Maintenance]] Personal Active"],
+  ['Mow Lawn',              "Project Focus [[Home Maintenance]] Personal Active"],
   ['Get some mower fuel',   "Action Next Personal [[Mow Lawn]] Errand"],
-  ['Pick up palm branches', "Action Next Personal [[Mow Lawn]] Weekend"],
+  ['Pick up palm branches', "Action [[Waiting For]] Personal [[Mow Lawn]] Weekend"],
   ['Mow the lawn already',  "Action Future Personal [[Mow Lawn]] Weekend"],
   
-  ['Buy snowboard',                          "Project Recreation Personal Someday/Maybe"],
+  ['Buy snowboard',                          "Project Focus Recreation Personal Someday/Maybe"],
   ['Look in phone book for local ski shops', "Action Next Personal [[Buy snowboard]] Home"],
   ['Ask Ben for recommendations',            "Action Next Personal [[Buy snowboard]] Call"],
 
-  ['Hang up bedroom curtains', "Project [[Home Maintenance]] Personal Active"],
+  ['Hang up bedroom curtains', "Project Focus [[Home Maintenance]] Personal Active"],
   ['Buy curtain rail and screws', "Action Next Personal [[Hang up bedroom curtains]] Errand"],
   ['Drill holes and hung up curtain rail', "Action Future Personal [[Hang up bedroom curtains]] Home"],
   ['Place curtain pins and hung up curtains', "Action Future Personal [[Hang up bedroom curtains]] Home"],
   
-  ['Go to theatre with Sue', "Project Recreation Personal Active"],
+  ['Go to theatre with Sue', "Project Focus Recreation Personal Active"],
   ['Ring Sue: decide play and dates', "Action Next Personal [[Go to theatre with Sue]] Call"],
   ['Ring ticket office and book places', "Action Future Personal [[Go to theatre with Sue]] Call"],
   
@@ -109,7 +109,7 @@ demo = [
   ['A project-less task with an Area',   "Action Next Personal Research"],
 
   # see if dependencies are working
-  ['Test deps', "Project Personal Active"],
+  ['Test deps', "Project Focus Personal Active"],
   ['Action A', "Action [[Test deps]] Next"],
   ['Action B depends on A', "Action [[Test deps]] Future [[Action A]]"], # depends on Action A
   ['Action C', "Action [[Test deps]] Next"],
