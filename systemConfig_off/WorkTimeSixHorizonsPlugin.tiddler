@@ -1,0 +1,40 @@
+/***
+WorkTimeSixHorizonsPlugin
+Organize my Goals into the Six Horizons of Focus
+Create GTD Components for SixLevelModel.  This should help create projects and actions for what you really want to focus on in SixLevelModel during Weekly Review.
+***/
+//{{{
+
+config.mGTD.specialTags.push("Scratch");
+
+config.mGTD.tagsToIndex.push("WhyDoes");
+config.mGTD.tagsToIndex.push("Vision");
+config.mGTD.tagsToIndex.push("Goal");
+
+Tiddler.prototype.sort_SixLevelModel = function() {
+	var whydoS = "";
+	var visionS = "";
+	var visionT = "";
+	
+	visionS = this.getParent("Vision");
+
+	visionT = store.getTiddler(visionS);
+	if(visionT){
+		whydoS = visionT.getParent("WhyDoes");
+	}
+	return "" + whydoS + '_' + visionS + '_' + this.title;
+}
+
+Tiddler.prototype.sort_Vision = function() {
+	var visionS = this.getParent("Vision");
+	return "" + visionS +'_' + this.title;
+}
+
+
+config.indexedTags.tagsToIndex = config.mGTD.tagsToIndex;
+config.indexedTags.initTagLists();
+config.indexedTags.initIndexes();
+
+//config.indexedTags.init(config.mGTD.tagsToIndex);
+
+//}}}

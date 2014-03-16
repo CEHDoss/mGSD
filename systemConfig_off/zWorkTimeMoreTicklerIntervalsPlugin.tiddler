@@ -1,0 +1,28 @@
+/***
+WorkTimeMoreTicklerIntervalsPlugin
+Add more Tickler intervals: WorkWeekly, Bimonthly, Halfyearly
+***/
+//{{{
+
+//TODO: figure out how to deal with load order
+//requires dateChooserPlugin
+
+if (DatePicker) {
+	
+	merge(config.macros.addDay.label, {addDayWW:"+ww", addBimonth:"+bm", addHalfyear:"+hy"});
+	merge(config.macros.addDay.tooltip, {addDayWW:"workweek", addBimonth:"bimonth", addHalfyear:"halfyear"});
+
+	config.macros.addDayWW     = config.macros.addDay;
+	config.macros.addBimonth   = config.macros.addDay;
+	config.macros.addHalfyear  = config.macros.addDay;
+
+
+	merge(Date.prototype,{
+		addDayWW:     function(n) { this.setDate(  this.getDate()      + (this.getDay() == 5?n+2:n)); },
+		addMonth:     function(n) { this.setDate(  this.getDate()      + n*28 ); },
+		addBimonth:   function(n) { this.setMonth( this.getMonth()     + n*2  ); },
+		addHalfyear:  function(n) { this.setDate(  this.getDate()     + n*182  ); }
+	});
+}
+
+//}}}

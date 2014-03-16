@@ -1,0 +1,993 @@
+/***
+WorkTime Config
+***/
+//{{{
+
+config.options.txtGTDHome = 'B:\\GTD Home\\';
+
+config.options.txtTheme = 'WorkTimeTheme';
+
+/* The latest Java or TiddlyWiki doesn't seem to like me moving above my local directory */
+//config.options.txtBackupFolder = '..\\' + 'twbackup';
+
+//}}}
+
+/***
+Update LessBackups to use TiddlySaver since browser security updates broke it
+***/
+//{{{
+
+/*
+
+window.getSpecialBackupPath_WTBackup = window.getSpecialBackupPath;
+
+window.getSpecialBackupPath = function(backupPath) {
+
+  var now = new Date();
+
+  var modes = config.lessBackups.modes;
+
+  for (var i=0;i<modes.length;i++) {
+
+    // the filename we will try
+    var specialBackupPath = backupPath.replace(/(\.)([0-9]+\.[0-9]+)(\.html)$/,
+        '$1'+now.formatString(modes[i][0]).toLowerCase()+'$3')
+
+    // open the file
+    try {
+	  //netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+      //var file = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+      //file.initWithPath(specialBackupPath);
+	  var applet = document.applets['TiddlySaver'];
+      //var fileExists = file.exists();
+	  var fileExists = applet.exists(specialBackupPath);
+      //if (fileExists) var modDate = file.lastModifiedTime;
+	  if(fileExists) var modDate = applet.modificationTime(specialBackupPath);
+    }
+    catch(e) {
+      // give up
+      return window.getSpecialBackupPath_WTBackup(backupPath);
+    }
+
+    // expiry is used to tell if it's an 'old' one. Eg, if the month is June and there is a
+    // June file on disk that's more than an month old then it must be stale so overwrite
+    // note that "latest" should be always written because the expiration period is zero (see above)
+    //var expiry = new Date(modDate + modes[i][1]);
+	var expiry = modDate + modes[i][1];
+    if (!fileExists || now.getTime() > expiry)
+      return specialBackupPath;
+  }
+}
+
+window.getSpecialBackupPath = function(backupPath) {
+
+  var now = new Date();
+  
+    try {
+	  var specialBackupPath;
+	  
+	  for (var i=0;i<twbackups.length;i++) {
+	    method = "get"+twbackups[i][0];
+		alert(method);
+		var nowM = now[method]();
+	    if(nowM != twbackups[i][1]){
+		  twbackups[i][1] = nowM; //This needs to be done before the primary save
+		  specialBackupPath = backupPath.replace(/(\.)([0-9]+\.[0-9]+)(\.html)$/,'$1'+twbackups[i][0]+nowM+'$3');
+		  break;
+		}
+	  }
+	  
+	  return specialBackupPath;
+    }catch(e) {
+	  console.log(e.message);
+      // give up
+    }
+	return window.getSpecialBackupPath_WTBackup(backupPath);
+}
+*/
+/*
+config.periodicBackups = {
+	currentPeriodIndex: 0,
+
+	backupPeriods: [
+		['FullYear', 0],
+		['Month', 0],
+		['Date', 0],
+		['Day', 0],
+		['Hours', 0],
+		['Minutes', 0]
+	],
+	
+	loadData: function(){
+		store.getTiddler('PeriodicBackupsPlugin').data.split('\n').forEach(function(element, index){
+			config.periodicBackups.backupPeriods[index] = element.split(':');
+		});
+	},
+	
+	saveData: function(){
+		var text = '';
+		this.backupPeriods.forEach(function (element) {
+			text += element[0] +':'+ element[1]+'\n';
+		});
+		var plugin = store.getTiddler('PeriodicBackupsPlugin').data = text.trim();
+	},
+	
+	findNextPeriod: function(){
+		var now = new Date();
+		for (var i=0;i<this.backupPeriods.length;i++) {
+			method = 'get'+this.backupPeriods[i][0];
+			var nowM = now[method]();
+			if(nowM != this.backupPeriods[i][1]){
+				this.backupPeriods[i][1] = nowM;
+				this.currentPeriodIndex = i;
+				break;
+			}
+		}
+	}
+}
+
+window.saveMain_pb_orig = window.saveMain;
+window.saveMain = function (localPath,original,posDiv) {
+	try{
+		config.periodicBackups.findNextPeriod();
+		config.periodicBackups.saveData();
+		window.saveMain_pb_orig(localPath,original,posDiv);
+	}catch(e){
+	  console.log(e.message);
+	}
+}
+
+window.getBackupPath_pb_orig = window.getBackupPath;
+if(window.getBackupPath_mptw_orig)window.getBackupPath_pb_orig = window.getBackupPath_mptw_orig;
+window.getBackupPath = function (localPath,title,extension){
+	var backupPath = getBackupPath_pb_orig(localPath,title,extension);
+	try{
+		config.periodicBackups.loadData();
+		var currentPeriod = config.periodicBackups.backupPeriods[config.periodicBackups.currentPeriodIndex];
+		return backupPath.replace(/(\.)([0-9]+\.[0-9]+)(\.html)$/,'$1'+currentPeriod[0]+currentPeriod[1]+'$3');
+	}catch(e){
+	  console.log(e.message);
+	}
+	return backupPath;
+}
+*/
+//}}}
+
+/***
+Add title to priority and order slice so Context with same order stay in same order
+***/
+//{{{
+
+Tiddler.prototype.sort_orderSlice = function() {
+	var orderSlice = store.getTiddlerSlice(this.title,"order");
+	return "" + orderSlice + this.title;
+}
+
+Tiddler.prototype.sort_prioritySlice = function() {
+	var orderSlice = store.getTiddlerSlice(this.title,"priority");
+	return "" + orderSlice + this.title;
+}
+
+Tiddler.prototype.sort_SixLevelModel = function() {
+	var whydoS = "";
+	var visionS = "";
+	var visionT = "";
+	
+	visionS = this.getParent("Vision");
+
+	visionT = store.getTiddler(visionS);
+	if(visionT){
+		whydoS = visionT.getParent("WhyDoes");
+	}
+	return "" + whydoS + '_' + visionS + '_' + this.title;
+}
+
+//}}}
+
+/***
+Added group by functions to Array prototype granting multiple ways to group GTDComponents:
+group References by Area or Project.  There are still some bugs to work out.  This is used for WikiTab to re-introduce some wiki features I miss.
+group Ticklers by TickleDate for LandscapeTab.  One day I will figure out how to make this look like a calender.
+Modify groupCountOnly to allow starred which will show all starred items allowing References that has your attention to be readily available.
+
+isStarred is used in several new views to focus on what has my attention.  isStarred does not use HasStarredProject because "ProjectStatus" == Starred doesn't work.
+
+***/
+//{{{
+
+merge(Array.prototype,{
+
+	formatAreaOrProject: function(t) {
+		var projectT = t.getParent("Project");
+		if(projectT != ""){
+			return projectT;
+		}else{
+			var areaT = t.getParent("Area");
+			if(areaT != ""){
+				return areaT;
+			}else{
+				return store.getTiddler("(No Project)");
+			}
+		}
+ 	},
+	
+	formatTickleDate: function(t) {
+		var date = Date.convertFromYYYYMMDDHHMM(t.fields['mgtd_date'])
+		var diff = date - new Date();
+		if(diff < 0) diff = 0;
+		var days = Math.ceil(diff/86400000)+'';
+		var padDays = days.length < 2?"0"+days:days;
+		var desc = '  ';
+		if(days < 1)desc += 'Today';
+		else if(days < 2)desc += 'Tommorrow';
+		else desc += config.messages.dates.days[date.getDay()];
+		return [padDays+desc];
+	},//End Added by Dossc
+
+	renderGrouped: function(listRenderMethod,headingRenderMethod,noneHeading,renderOptions,groupCountOnly,nbTags) {
+		// do I ever use renderOptions??
+		// this lost some elegance when I shoehorned the groupCountOnly part in. todo refactor
+		// then lost some more with the nbTags addition...
+		// might need some reworking
+		// Dossc I guess I made it even worse with starred for More Wiki Functions
+		var result = "";
+		this.each(function(g) {
+			var groupName = g[0];
+			var groupItems = g[1];
+
+			var showCount = "";
+			if (groupCountOnly && groupCountOnly != "")
+				showCount = groupItems.length > 0 ? " ("+groupItems.length+")" : "";
+
+			var makeHeading = (groupCountOnly&&groupCountOnly!="") ? "" : "!!";
+			if(groupCountOnly && groupCountOnly == "starred")makeHeading = "!!";//Added by Dossc - added !! when groupCountOnly: starred for More Wiki Functions
+			var newButtonMarkup = "";
+
+			// this sucks
+			if (nbTags && nbTags != '') {
+				newButtonMarkup = " "+config.macros.mgtdList.getNewButton(nbTags + " [["+groupName+"]]");
+			}
+
+			if (groupName == "__NONE__") {
+				result = result + makeHeading + "{{noneHeading{[[("+(noneHeading?noneHeading:"No "+headingRenderMethod)+")]]}}}"+showCount+"\n";
+			}
+			else {
+				var gTiddler = store.getTiddler(groupName);
+				if (gTiddler) {
+					result = result + makeHeading+gTiddler.render(headingRenderMethod)+showCount+newButtonMarkup+"\n";
+				}
+				else {
+					result = result + makeHeading+"[["+groupName+"]]"+showCount+newButtonMarkup+"\n";
+				}
+			}
+			if (!groupCountOnly || groupCountOnly == "")
+				result = result + groupItems.render(listRenderMethod,renderOptions) + "\n";
+			//Start Added by Dossc - render starred items with groupCountOnly:starred for More Wiki Functions
+			else if(groupCountOnly && groupCountOnly == "starred"){
+				var starredItems = [];
+				groupItems.each(function(t) {
+					if(t.isStarred())starredItems.push(t);
+				});
+				result = result + starredItems.render(listRenderMethod,renderOptions) + "\n";
+			}
+			//End Added by Dossc
+		});
+			
+		if (groupCountOnly && groupCountOnly != "")
+			result = result.replace(/\n$/,''); // hack. remove trailing linefeed
+
+		return result;
+	}
+	
+});
+
+config.indexedTags.tiddlerMethods.hasVision = function() {
+			var projs = this.getByIndex("Area");
+
+			if (projs.length == 0)
+				return false;
+
+			for (var i=0;i<projs.length;i++)
+				if (store.fetchTiddler(projs[i]).hasParent("Vision"))
+					return true;
+			return false;
+		}
+
+config.indexedTags.tiddlerMethods.isStarred = function() {
+			if(this.isTagged("Starred"))return true;
+			//if(!this.isTagged("Action"))return false; //Removed by Dossc - I want to include references
+			var projs = this.getByIndex("Project");
+
+			if (projs.length == 0)
+				return false;
+
+			for (var i=0;i<projs.length;i++)
+				if (
+					(store.fetchTiddler(projs[i]).isTagged("Starred"))
+					&&
+					!store.fetchTiddler(projs[i]).tags.contains('Complete') // seems stupid
+					)
+					return true;
+			return false;
+		}
+		
+config.indexedTags.tiddlerMethods.hasSubProject = function() {
+		var children = fastTagged(this.title).filterByTagExpr('Project && !Complete');// && (Active || Queued)
+		if(children.length <= 0){
+			children = fastTagged(this.title).filterByTagExpr('Area')
+			for(var i = 0; i < children.length;i++){
+				if(fastTagged(children[i].title).filterByTagExpr('Project && !Complete').length > 0)return true;
+			}
+			return false;
+		}else return true;
+		//return children.length > 0;
+    }
+
+merge(Tiddler.prototype,config.indexedTags.tiddlerMethods);
+
+//TODO I should really find a way to seperate my changes with this giant important method!
+config.macros.mgtdList.refresh = function(place) {
+
+			removeChildren(place);
+
+			var title = place.getAttribute("title");
+			var startTag = place.getAttribute("startTag");
+			var tagMode = place.getAttribute("tagMode");
+			var tagExpr = place.getAttribute("tagExpr");
+			var groupBy = place.getAttribute("groupBy");
+			var groupCountOnly = place.getAttribute("groupCountOnly");
+			var gTagExpr = place.getAttribute("gTagExpr");
+			var whereExpr = place.getAttribute("whereExpr");
+			var gWhereExpr = place.getAttribute("gWhereExpr");
+			var sortBy = place.getAttribute("sortBy");
+			var gSortBy = place.getAttribute("gSortBy");
+			var viewType = place.getAttribute("viewType");
+			var gViewType = place.getAttribute("gViewType");
+			var ignoreRealm = place.getAttribute("ignoreRealm");
+			var leftoverTitle = place.getAttribute("leftoverTitle");
+			var newButton = place.getAttribute("newButton");
+			var newButtonTags = place.getAttribute("newButtonTags");
+			var tiddlerTitle = place.getAttribute("tiddlerTitle");
+			var dontShowEmpty = place.getAttribute("dontShowEmpty");
+
+			var wikifyThis = "";
+
+			wikifyThis += "{{mgtdList{\n";
+
+            if (title != "")
+			    wikifyThis += "!"+title
+
+			var nbTags;
+			if (newButtonTags != '') {
+				nbTags = [
+						newButtonTags,                                  // the tags specified in the macro params
+						'[['+config.macros.mgtdList.getRealm(tiddlerTitle)+']]',    // the realm. always want a realm
+						(tagMode=='global'?'':'[['+tiddlerTitle+']]')   // if not global, then the add tiddler we're in, new here style
+					].join(' ');
+
+
+				var nbList = nbTags.readBracketedList();
+
+				var nbExtra = nbTags;
+
+				// also we want an area. another hack. darn you subprojects.. :)
+				if (nbList.contains('Project') && !nbList.containsAny(fastTagged('Area').toTitleList())) {
+					var foo = store.fetchTiddler(tiddlerTitle).getByIndex('Area');
+					if (foo.length > 0) {
+						nbExtra += ' [[' + foo[0] + ']]';
+					}
+				}
+
+				if (nbList.contains('Project') && !nbList.containsAny(fastTagged('ProjectStatus').toTitleList())) {
+					// stupid hack for subprojects list in project dashboards
+ 					// don't want to create a project with no status
+					// this is the hack:
+					nbExtra += ' Active';
+				}
+
+				// same hack thing for actions
+				if (nbList.contains('Action') && !nbList.containsAny(fastTagged('ActionStatus').toTitleList())) {
+					nbExtra += ' Next';
+				}
+
+				wikifyThis += this.getNewButton(nbExtra);
+				// but still use nbTags later on in group headings...
+
+			}
+
+
+            if (title != "" || newButton != "")
+			    wikifyThis += "\n";
+
+			wikifyThis += "{{innerList{\n";
+
+			var checkForContent = wikifyThis;
+
+			var theList = [];
+			if (startTag && startTag != 'undefined'/* this sucks */) {
+				theList = fastTagged(startTag);
+			}
+			else {
+				// why so hard to get an array of all tiddlers?
+				store.forEachTiddler(function(t_title,t_tiddler) { theList.push(t_tiddler); });
+			}
+
+
+			if (tagExpr != "") theList = theList.filterByTagExpr(tagExpr);
+			if (whereExpr != "") theList = theList.filterByEval(whereExpr);
+
+			if (ignoreRealm != "yes") {
+				var activeRealms = config.macros.mgtdList.getActiveRealms();
+				theList = theList.select(function(t) {
+					var realm = t.getByIndex("Realm");
+					return (
+						realm.length == 0 ||  // so something with no realm shows up
+						realm.containsAny(activeRealms)
+					);
+				});
+			}
+
+            if (groupBy == "day") {
+                // experimental. changing a tag doesn't update modified so
+                // this isn't as useful
+                theList = theList.groupBy(function(t){return [t.modified.formatString('YYYY-0MM-0DD')];});
+				wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle);
+            }
+			//Start Added by Dossc - detect tickleDate for LandscapeTab
+			else if (groupBy == "AreaOrProject") {
+	                theList = theList.groupBy(theList.formatAreaOrProject).reverse();
+					wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle,null,groupCountOnly,nbTags);
+			}
+			else if (groupBy == "tickleDate") {
+	                theList = theList.groupBy(theList.formatTickleDate).reverse();
+					wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle);
+			}
+			//End Added by Dossc
+			else if (groupBy != "") {
+				theList = theList.groupByTag(groupBy,sortBy,gSortBy);
+				if (gTagExpr != "") theList = theList.filterGroupsByTagExpr(gTagExpr);
+				if (gWhereExpr != "") theList = theList.filterGroupsByEval(gWhereExpr);
+				wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle,null,groupCountOnly,nbTags);
+			}
+			else {
+				theList = theList.tiddlerSort(sortBy);
+				wikifyThis += theList.render(viewType);
+			}
+
+			var emptyList = false;
+			if (wikifyThis == checkForContent) {
+				emptyList = true;
+				wikifyThis += "{{none{none}}}";
+			}
+
+			wikifyThis += "}}}\n";
+			wikifyThis += "}}}\n";
+
+			if (!(dontShowEmpty == "yes" && emptyList))
+				wikify(wikifyThis,place,null,tiddler);
+
+		}
+
+//}}}
+
+/***
+Update short hand fields variables for Quick Add function
+***/
+//{{{
+
+//TODO why must shortHand variables exist inside a function.  Why!?!
+//TODO shortHand should really read from a Context slice
+config.macros.processInbox.handler = function(place,macroName,params,wikifier,paramString,tiddler) {
+
+			var shortHand = {
+				Action: {
+					'W': 'Waiting For',
+					'N': 'Next',
+					'F': 'Future',
+					'S': 'Starred',
+					//Start Added by Dossc - Commonly used Context
+					'NE': 'Anywhere',
+					'C': 'Computer',
+					'A': 'Agenda',
+					'LE': 'LowEnergy',
+					'Q': 'Quick',
+					'L': 'Long',
+					//End Addded by Dossc
+				},
+				Project: {
+					'A': 'Active',
+					'SM': 'Someday/Maybe',
+					'S': 'Starred',
+				}
+			};
+
+			wikify("Quick add projects and actions (See [[About Quick Add]] for more info):\n",place);
+			var pi = createTiddlyElement(place,"textarea",null,"piBox");
+			
+			wikify("\n",place);
+
+			var a1 = createTiddlyCheckbox(place,"Open created projects",true,null);
+			a1.id = 'piShowProjects';
+
+			var a2 = createTiddlyCheckbox(place,"Open created actions",true,null);
+			a2.id = 'piShowActions';
+
+			wikify("\n",place);
+
+			var btn = createTiddlyButton(place,"quick add now","create these items",function(e) {
+				var lines = pi.value.split("\n");
+				var currentProject = "";
+				var displayThese = [];
+
+				for (var i=0;i<lines.length;i++) {
+
+					var fields_and_text = lines[i].trim().split(/[|;]{2}/); // anything after || is to become tiddler content
+					
+
+					var fields = fields_and_text[0].trim().split(/[|;]/);
+					var tiddlerText = fields_and_text[1];
+
+
+					if (!fields[0] || fields[0].trim() == "") {
+						currentProject = "";
+					}
+					else {
+
+						var title = fields.shift();
+						//alert(title);
+
+						// add the realm
+						fields.push(config.macros.mgtdList.getRealm());
+
+						if (title.substr(0,1) != '.') {
+
+							//alert("project "+title);
+
+							currentProject = title;
+
+							if (document.getElementById('piShowProjects').checked)
+								displayThese.push(title);
+
+							fields.push("Project"); // make it a project
+							//fields.push("Active"); // make it active
+
+							if (!fields.containsAny(['SM','A', 'Q']))
+								fields.push('A');
+
+							fields = fields.map(function(f) {
+								if (shortHand['Project'][f])
+									return shortHand['Project'][f];
+								else
+									return f;
+							});
+
+							if (store.tiddlerExists(title))
+								alert("Warning: '"+title+"' already exists, did not create");
+							else
+								store.saveTiddler(
+									title,title,
+									tiddlerText ? tiddlerText : "", // content
+									config.options.txtUserName,
+									new Date(),
+									fields, // tags
+									null // extra fields
+								);
+						}
+						else {
+							//alert("action "+title);
+
+							// default to next actions
+							if (!fields.containsAny(['N','F','W']))
+								fields.push('N');
+
+							fields = fields.map(function(f) {
+								if (shortHand['Action'][f])
+									return shortHand['Action'][f];
+								else
+									return f;
+							});
+
+							//alert("action "+title);
+							title = title.trim();
+							title = title.replace(/^\.+/,'');
+
+							// If the action is already existing
+							// let's presume that we want to create it as a unique action.
+							// Use some code from NewMeansNewPlugin.
+							if (config.macros.newTiddler.getName)
+								title = config.macros.newTiddler.getName(title);
+
+							if (document.getElementById('piShowActions').checked)
+								displayThese.push(title);
+
+							fields.push("Action"); // make it an action 
+							if (currentProject.trim() != "")
+								fields.push(currentProject); // make it in this project
+
+							// these should be configurable
+							var automagicContexts = {
+								'Call':'call',
+								'Errand':'buy'
+							};
+							for (amc in automagicContexts) {
+								var checkExists = store.fetchTiddler(amc);
+								var startString = automagicContexts[amc];
+								if (title.substr(0,startString.length).toLowerCase() == startString && checkExists && checkExists.hasTag('Context')) {
+									fields.push(amc);
+								}
+							}
+
+							if (store.tiddlerExists(title))
+								alert("Warning: '"+title+" already exists, did not create");
+							else
+								store.saveTiddler(
+									title,title,
+									tiddlerText ? tiddlerText : "", // content
+									config.options.txtUserName,
+									new Date(),
+									fields, // tags
+									null // extra fields
+								);
+						}
+					}
+				}
+
+				for (var ii=0;ii<displayThese.length;ii++)
+					story.displayTiddler("bottom",displayThese[ii]);
+
+				displayMessage("Quick add items created");
+
+				// Clear the quick add text area and close the slider. (jQuery anyone?)
+				jQuery(pi).val('');
+				jQuery(pi).closest('.sliderPanel').hide();
+
+				return false;
+			}); // end of createTiddlyButton
+
+			// A button to clear the textarea
+			createTiddlyButton(place,"clear","Clear text",function(){ jQuery(pi).val(''); });
+
+			// A button to close the slider
+			createTiddlyButton(place,"close","Close Quick Add",function(){ jQuery(pi).closest('.sliderPanel').hide(); });
+
+		};
+
+//}}}
+
+/***
+Update and Add Renders for WorkTime Theme
+***/
+//{{{
+
+merge(Tiddler.prototype,{//Start Added by Dossc - render area with goals for SixLevelModel
+
+	//Comment by Dossc - why do I get the feeling I am going to regret this.
+	render_Generic: function() {
+		return this.renderGenericControls(this.getGenericControls());
+	},
+	
+	render_GenericGroup: function() {
+		var controls = this.getGenericControls();
+		
+		controls['css'] = '';
+		controls['done'] = '';
+		controls['state'] = '';
+		controls['star'] = '';
+		
+		return this.renderGenericControls(controls);
+	},
+	
+	getGenericControls: function() {
+		if (this.hasTag("Action")){
+			return this.getActionControls();
+		} else if(this.hasTag("Project")){
+			return this.getProjectControls();
+		} else if(this.hasTag("Tickler")){
+			return this.getTicklerControls();
+		} else if(this.hasTag("Area")){
+			return this.getAreaControls();
+		} else if(this.hasTag("Goal")){
+			return this.getAreaControls();
+		} else if(this.hasTag("Vision")){
+			return this.getAreaControls();
+		}// else
+		return this.getDefaultControls();
+	},
+	
+	getDefaultControls: function() {
+		var pLink = "";
+		var link = "";
+		var note = "";
+		
+		if (config.mGTD.getOptChk('FullAreaInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Area [[title]] [[%0]]>>}}}".format([this.title]); }
+		else { pLink += "{{projLink{<<linkToParent Area '[A]' [[%0]]>>}}}".format([this.title]); }
+
+		if (config.mGTD.getOptChk('FullProjectInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Project [[title]] [[%0]]>>}}}".format([this.title]); }
+		else { pLink += "{{projLink{<<linkToParent Project '[P]' [[%0]]>>}}}".format([this.title]); }
+
+		if (config.mGTD.getOptChk('FullContactInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Contact [[title]] [[%0]]>>}}}".format([this.title]);	}
+		else { pLink += "{{projLink{<<linkToParent Contact '[C]' [[%0]]>>}}}".format([this.title]); }
+		
+		linkS = store.getTiddlerSlice(this.title, "link");
+		if(linkS){ link = ' [[link|'+linkS+']]'; }
+		
+		var noteS = store.getTiddlerSlice(this.title, "note");
+		if(noteS){ note += ' ' + noteS; }
+		
+		return {	
+					'css':'plain',
+					'done':'',
+					'state':'',
+					'star':'<<singleToggleTag tag:Starred title:[[%0]]>>',
+					'delete':'<<deleteTiddler [[%0]]>>',
+					'pLink':pLink,
+					'link':link,
+					'note':note
+	};},
+	
+	renderGenericControls: function(controls) {
+		var cssOpen = "";
+		var cssClose = "";
+		
+		if(controls['css']){
+			cssOpen = '{{'+controls['css']+'{';
+			cssClose = '}}} ';
+		}
+	
+		return this.renderUtil(
+		cssOpen+
+		controls['done']+
+		controls['state']+
+		controls['star']+
+		' [[%0]]'+
+		controls['delete']+
+		cssClose+controls['pLink']+controls['link']+'{{tiny{'+controls['note']+'}}}',
+		[
+			this.title
+		]
+	);},
+	
+	render_Default: function() {
+		return this.renderGenericControls(this.getDefaultControls());
+	},
+	
+	render_Action: function() {
+		return this.renderGenericControls(this.getActionControls());
+	},
+	
+	getActionControls: function() {
+		controls = this.getDefaultControls();
+	
+		controls['css'] = 'action';
+		controls['done'] = '<<toggleTag Done [[%0]] ->>';
+		controls['state'] = '<<multiToggleTag tag:ActionStatus title:[[%0]]>>';
+		controls['delete'] += '<<newSavedTiddler prompt:"Enter name for new Action:" tooltip:"Create a new Action" label:"+" tag:"%0">>'.format([
+          String.encodeTiddlyLinkList(this.tags)]);
+		return controls;
+	},
+	
+	render_Area: function() {
+		return this.renderGenericControls(this.getAreaControls());
+	},
+	
+	getAreaControls: function() {
+		controls = this.getDefaultControls();
+		
+		var note = controls['note'];
+		
+		var visionS = this.getParent("Vision");
+
+		if(visionS != ''){
+			note += ' | [['+visionS+']]';
+			var visionT = store.getTiddler(visionS);
+			if(visionT){
+				var whydoS = visionT.getParent("WhyDoes");
+				note += ' | [['+whydoS+']]';
+			}
+		}
+		
+		controls['note'] = note;
+		return controls;
+	},
+	
+	render_Tickler: function() {
+		return this.renderGenericControls(this.getTicklerControls());
+	},
+	
+	getTicklerControls: function() {
+		controls = this.getDefaultControls();
+		
+		controls['css'] = "tickler";
+		var repeatType = this.getByIndex('TicklerRepeatType');
+		if (repeatType.length == 0 || repeatType.contains('Once')) {
+			// show normal done checkbox
+			controls['done'] = '<<toggleTag Actioned [[%0]] ->>';
+		}
+		else if (repeatType.contains('Daily'))       { controls['done'] = '<<addDay [[%0]]>>' }
+		else if (repeatType.contains('WorkWeekly'))  { controls['done'] = '<<addDayWW [[%0]]>>' }
+		else if (repeatType.contains('Weekly'))      { controls['done'] = '<<addWeek [[%0]]>>' }
+		else if (repeatType.contains('Fortnightly')) { controls['done'] = '<<addFortnight [[%0]]>>' }
+		else if (repeatType.contains('Monthly'))     { controls['done'] = '<<addMonth [[%0]]>>' }
+		else if (repeatType.contains('Bimonthly'))   { controls['done'] = '<<addBimonth [[%0]]>>' }
+		else if (repeatType.contains('Halfyearly'))  { controls['done'] = '<<addHalfyear [[%0]]>>' }
+		else if (repeatType.contains('Yearly'))      { controls['done'] = '<<addYear [[%0]]>>' }
+		
+		controls['state'] = '<<dateChooser [[%0]]>>';
+		
+		return controls;
+	},
+	
+	render_Project: function() {
+		return this.renderGenericControls(this.getProjectControls());
+	},
+	
+	getProjectControls: function() {
+		controls = this.getDefaultControls();
+		
+		controls['css'] = "project";
+		controls['done'] = '<<toggleTag Complete [[%0]] ->>';
+		controls['state'] = '<<multiToggleTag tag:ProjectStatus title:[[%0]]>>';			
+		controls['note'] += ' '+this.modified.prettyDate();
+		
+		return controls;
+	},
+
+	render_link: function() {
+
+		var pLink = '';
+		var link = store.getTiddlerSlice(this.title, "link");
+		if (link){
+			pLink += '[[link|'+link+']]'
+		}
+
+		return this.renderUtil(
+		'{{plain{[[%0]]}}} %1',
+		[
+			this.title,
+			pLink
+		]
+	);},
+
+	render_note: function() { return this.renderUtil(
+		"[[%0]]"+' ~~<<tiddler [[%0::note]]>>~~',
+		[
+			this.title
+		]
+	);},//Start Added by Dossc - Tickler Group view for LandscapeTab
+
+	render_Tick: function() {
+		var repeatType = this.getByIndex('TicklerRepeatType');
+		var doneControl = "";
+		if (repeatType.length == 0 || repeatType.contains('Once')) {
+			// show normal done checkbox
+			doneControl = '<<toggleTag Actioned [[%0]] ->>';
+		}
+		else if (repeatType.contains('Daily'))       { doneControl = '<<addDay [[%0]]>>' }
+		else if (repeatType.contains('WorkWeekly'))  { doneControl = '<<addDayWW [[%0]]>>' }//Added by Dossc - button for WorkWeekly TicklerRepeatType
+		else if (repeatType.contains('Weekly'))      { doneControl = '<<addWeek [[%0]]>>' }
+		else if (repeatType.contains('Fortnightly')) { doneControl = '<<addFortnight [[%0]]>>' }
+		else if (repeatType.contains('Monthly'))     { doneControl = '<<addMonth [[%0]]>>' }
+		else if (repeatType.contains('Bimonthly'))   { doneControl = '<<addBimonth [[%0]]>>' }//Added by Dossc - bimonthly for WorkWeekly TicklerRepeatType
+		else if (repeatType.contains('Halfyearly'))  { doneControl = '<<addHalfyear [[%0]]>>' }//Added by Dossc - halfyearly for WorkWeekly TicklerRepeatType
+		else if (repeatType.contains('Yearly'))      { doneControl = '<<addYear [[%0]]>>' }
+
+		return this.renderUtil(
+		'{{tickler{'+'%1'+  
+		'&nbsp;[[%0]]'+
+		'}}}',
+		[
+			this.title,
+            doneControl.format([this.title])
+		]
+	);},//End Added by Dossc
+
+	render_star: function() { 
+		var pLink = '';
+		var link = store.getTiddlerSlice(this.title, "link");
+		if (link){
+			pLink += '[[link|'+link+']]'
+		}
+
+		return this.renderUtil(
+		'{{plain{'+
+		'<<singleToggleTag tag:Starred title:[[%0]]>>'+
+		'[[%0]]}}} %1',
+		//'{{notesLink{<<showNotesIcon [[%0]]>>}}}',//Removed by Dossc - takes a long time to render references; remember to move the coma
+		[
+			this.title,
+			pLink //Added by Dossc - add link to refrences for More Wiki Functions
+		]
+	);}
+	
+});
+
+//}}}
+
+/***
+Add more Tickler intervals: WorkWeekly, Bimonthly, Halfyearly
+***/
+//{{{
+
+if (DatePicker) {
+	
+	merge(config.macros.addDay.label, {addDayWW:"+ww", addBimonth:"+bm", addHalfyear:"+hy"});
+	merge(config.macros.addDay.tooltip, {addDayWW:"workweek", addBimonth:"bimonth", addHalfyear:"halfyear"});
+
+	config.macros.addDayWW     = config.macros.addDay;
+	config.macros.addBimonth   = config.macros.addDay;
+	config.macros.addHalfyear  = config.macros.addDay;
+
+
+	merge(Date.prototype,{
+		addDayWW:     function(n) { this.setDate(  this.getDate()      + (this.getDay() == 5?n+2:n)); },
+		addMonth:     function(n) { this.setDate(  this.getDate()      + n*28 ); },
+		addBimonth:   function(n) { this.setMonth( this.getMonth()     + n*2  ); },
+		addHalfyear:  function(n) { this.setDate(  this.getDate()     + n*182  ); }
+	});
+}
+
+//}}}
+
+/***
+Add project folder to project and tasks.  This link opens a window for a project.
+
+Folder: config.options.txtGTDHome + Area
+
+Use Open in IE in Firefox or IE Tab in Chrome.  IE when provided with a file path will open the folder in explorer.
+
+I used to create a flag folders for delete before Firefox blocked writting to the filesystem.
+***/
+//{{{
+
+config.macros.folderButtons = {
+
+		handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+
+			var pp = paramString.parseParams("tag",null,true);
+
+			if (!tiddler)
+				tiddler = store.getTiddler(getParam(pp,"title"));
+
+			var longVersion = getParam(pp,"longVersion");
+			var title = getParam(pp,"title",tiddler.title);
+			var actOnTiddler = store.getTiddler(title);
+
+			var area = actOnTiddler.getParent("Area")
+			var referenceFolder = actOnTiddler.title
+
+			if(area == ""){
+				project = actOnTiddler.getParent("Project")
+				if(project != ""){
+					area = store.getTiddler(project).getParent("Area")
+				}
+			}
+
+			var folderPath = config.options.txtGTDHome+area
+
+			if(longVersion){
+				wikify("[[Folder|file://"+folderPath+"]]",place,null,tiddler)
+			}else{
+				wikify("[[PF|file://"+folderPath+"]]",place,null,tiddler)
+			}
+
+		}
+	}
+
+//}}}
+
+/***
+Create GTD Components for SixLevelModel.  This should help create projects and actions for what you really want to focus on in SixLevelModel during Weekly Review.
+***/
+//{{{
+
+config.mGTD.tagsToIndex.push("WhyDoes");
+config.mGTD.tagsToIndex.push("Vision");
+config.mGTD.tagsToIndex.push("Goal");
+
+config.indexedTags.tagsToIndex = config.mGTD.tagsToIndex;
+config.indexedTags.initTagLists();
+config.indexedTags.initIndexes();
+
+//config.indexedTags.init(config.mGTD.tagsToIndex);
+
+//}}}

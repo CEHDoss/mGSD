@@ -1,0 +1,48 @@
+/***
+WorkTimeProjectFolderPlugin
+Add Folder link to project, area, and tasks.  This link opens a window for a project.
+
+Recently I decided that a folder for each project was too specific and trim back to the Area.
+Folder: config.options.txtGTDHome + Area
+
+Use Open in IE in Firefox or IE Tab in Chrome.  IE when provided with a file path will open the folder in explorer.
+
+This used to contain code to create the folder and flag for pruning, but browser security has trimmed it way back.
+***/
+//{{{
+
+//TODO: This probably makes more since just to write the links in the theme now.
+config.macros.folderButtons = {
+
+		handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+
+			var pp = paramString.parseParams("tag",null,true);
+
+			if (!tiddler)
+				tiddler = store.getTiddler(getParam(pp,"title"));
+
+			var longVersion = getParam(pp,"longVersion");
+			var title = getParam(pp,"title",tiddler.title);
+			var actOnTiddler = store.getTiddler(title);
+
+			var area = actOnTiddler.getParent("Area")
+
+			if(area == ""){
+				project = actOnTiddler.getParent("Project")
+				if(project != ""){
+					area = store.getTiddler(project).getParent("Area")
+				}
+			}
+
+			var folderPath = config.options.txtGTDHome+area
+
+			if(longVersion){
+				wikify("[[Folder|file://"+folderPath+"]]",place,null,tiddler)
+			}else{
+				wikify("[[PF|file://"+folderPath+"]]",place,null,tiddler)
+			}
+
+		}
+	}
+
+//}}}

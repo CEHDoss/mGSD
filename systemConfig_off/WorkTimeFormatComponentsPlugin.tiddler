@@ -1,0 +1,260 @@
+/***
+WorkTimeFormatComponentsPlugin
+requires: WorkTimeSixHorizonsPlugin
+Generic Rendition rendered based on type.  This allows me to render all types in one list.
+Update current renders that I dislike.
+Used by WorkTimeTheme
+***/
+//{{{
+
+Tiddler.prototype.sort_Generic = function() {
+	var componentOrderS = 'Z';
+	var startedOrder = this.isStarred()?'1':'2';
+	if(this.isTagged("Action")){
+		componentOrderS = store.getTiddlerSlice("Action", "order");
+		statusOrderS = store.getTiddlerSlice(this.getParent("ActionStatus"), "order");
+	}else if(this.isTagged("Project")){
+		componentOrderS = store.getTiddlerSlice("Project", "order");
+		statusOrderS = store.getTiddlerSlice(this.getParent("ProjectStatus"), "order");
+	}
+	return "" + componentOrderS + statusOrderS + startedOrder + '_' + this.title;
+}
+
+merge(Tiddler.prototype,{//Start Added by Dossc - render area with goals for SixLevelModel
+
+	//Comment by Dossc - why do I get the feeling I am going to regret this.
+	render_Generic: function() {
+		return this.renderGenericControls(this.getGenericControls());
+	},
+	
+	render_GenericGroup: function() {
+		var controls = this.getGenericControls();
+		
+		controls['css'] = '';
+		controls['done'] = '';
+		controls['state'] = '';
+		controls['star'] = '';
+		
+		return this.renderGenericControls(controls);
+	},
+	
+	getGenericControls: function() {
+		if (this.hasTag("Action")){
+			return this.getActionControls();
+		} else if(this.hasTag("Project")){
+			return this.getProjectControls();
+		} else if(this.hasTag("Tickler")){
+			return this.getTicklerControls();
+		} else if(this.hasTag("Area")){
+			return this.getAreaControls();
+		} else if(this.hasTag("Goal")){
+			return this.getAreaControls();
+		} else if(this.hasTag("Vision")){
+			return this.getAreaControls();
+		}// else
+		return this.getDefaultControls();
+	},
+	
+	getDefaultControls: function() {
+		var pLink = "";
+		var link = "";
+		var note = "";
+		
+		if (config.mGTD.getOptChk('FullAreaInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Area [[title]] [[%0]]>>}}}".format([this.title]); }
+		else { pLink += "{{projLink{<<linkToParent Area '[A]' [[%0]]>>}}}".format([this.title]); }
+
+		if (config.mGTD.getOptChk('FullProjectInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Project [[title]] [[%0]]>>}}}".format([this.title]); }
+		else { pLink += "{{projLink{<<linkToParent Project '[P]' [[%0]]>>}}}".format([this.title]); }
+
+		if (config.mGTD.getOptChk('FullContactInActionLists')) { pLink += "{{projLinkFull{<<linkToParent Contact [[title]] [[%0]]>>}}}".format([this.title]);	}
+		else { pLink += "{{projLink{<<linkToParent Contact '[C]' [[%0]]>>}}}".format([this.title]); }
+		
+		linkS = store.getTiddlerSlice(this.title, "link");
+		if(linkS){ link = ' [[link|'+linkS+']]'; }
+		
+		var noteS = store.getTiddlerSlice(this.title, "note");
+		if(noteS){ note += ' ' + noteS; }
+		
+		return {	
+					'css':'plain',
+					'done':'',
+					'state':'',
+					'star':'<<singleToggleTag tag:Starred title:[[%0]]>>',
+					'delete':'<<deleteTiddler [[%0]]>>',
+					'pLink':pLink,
+					'link':link,
+					'note':note
+	};},
+	
+	renderGenericControls: function(controls) {
+		var cssOpen = "";
+		var cssClose = "";
+		
+		if(controls['css']){
+			cssOpen = '{{'+controls['css']+'{';
+			cssClose = '}}} ';
+		}
+	
+		return this.renderUtil(
+		cssOpen+
+		controls['done']+
+		controls['state']+
+		controls['star']+
+		' [[%0]]'+
+		controls['delete']+
+		cssClose+controls['pLink']+controls['link']+'{{tiny{'+controls['note']+'}}}',
+		[
+			this.title
+		]
+	);},
+	
+	render_Default: function() {
+		return this.renderGenericControls(this.getDefaultControls());
+	},
+	
+	render_Action: function() {
+		return this.renderGenericControls(this.getActionControls());
+	},
+	
+	getActionControls: function() {
+		controls = this.getDefaultControls();
+	
+		controls['css'] = 'action';
+		controls['done'] = '<<toggleTag Done [[%0]] ->>';
+		controls['state'] = '<<multiToggleTag tag:ActionStatus title:[[%0]]>>';
+		controls['delete'] += '<<newSavedTiddler prompt:"Enter name for new Action:" tooltip:"Create a new Action" label:"+" tag:"%0">>'.format([
+          String.encodeTiddlyLinkList(this.tags)]);
+		return controls;
+	},
+	
+	render_Area: function() {
+		return this.renderGenericControls(this.getAreaControls());
+	},
+	
+	getAreaControls: function() {
+		controls = this.getDefaultControls();
+		
+		var note = controls['note'];
+		
+		var visionS = this.getParent("Vision");
+
+		if(visionS != ''){
+			note += ' | [['+visionS+']]';
+		}
+		
+		controls['note'] = note;
+		return controls;
+	},
+	
+	render_Tickler: function() {
+		return this.renderGenericControls(this.getTicklerControls());
+	},
+	
+	getTicklerControls: function() {
+		controls = this.getDefaultControls();
+		
+		controls['css'] = "tickler";
+		var repeatType = this.getByIndex('TicklerRepeatType');
+		if (repeatType.length == 0 || repeatType.contains('Once')) {
+			// show normal done checkbox
+			controls['done'] = '<<toggleTag Actioned [[%0]] ->>';
+		}
+		else if (repeatType.contains('Daily'))       { controls['done'] = '<<addDay [[%0]]>>' }
+		else if (repeatType.contains('WorkWeekly'))  { controls['done'] = '<<addDayWW [[%0]]>>' }
+		else if (repeatType.contains('Weekly'))      { controls['done'] = '<<addWeek [[%0]]>>' }
+		else if (repeatType.contains('Fortnightly')) { controls['done'] = '<<addFortnight [[%0]]>>' }
+		else if (repeatType.contains('Monthly'))     { controls['done'] = '<<addMonth [[%0]]>>' }
+		else if (repeatType.contains('Bimonthly'))   { controls['done'] = '<<addBimonth [[%0]]>>' }
+		else if (repeatType.contains('Halfyearly'))  { controls['done'] = '<<addHalfyear [[%0]]>>' }
+		else if (repeatType.contains('Yearly'))      { controls['done'] = '<<addYear [[%0]]>>' }
+		
+		controls['state'] = '<<dateChooser [[%0]]>>';
+		
+		return controls;
+	},
+	
+	render_Project: function() {
+		return this.renderGenericControls(this.getProjectControls());
+	},
+	
+	getProjectControls: function() {
+		controls = this.getDefaultControls();
+		
+		controls['css'] = "project";
+		controls['done'] = '<<toggleTag Complete [[%0]] ->>';
+		controls['state'] = '<<multiToggleTag tag:ProjectStatus title:[[%0]]>>';			
+		controls['note'] += ' '+this.modified.prettyDate();
+		
+		return controls;
+	},
+
+	render_link: function() {
+
+		var pLink = '';
+		var link = store.getTiddlerSlice(this.title, "link");
+		if (link){
+			pLink += '[[link|'+link+']]'
+		}
+
+		return this.renderUtil(
+		'{{plain{[[%0]]}}} %1',
+		[
+			this.title,
+			pLink
+		]
+	);},
+
+	render_note: function() { return this.renderUtil(
+		"[[%0]]"+' ~~<<tiddler [[%0::note]]>>~~',
+		[
+			this.title
+		]
+	);},//Start Added by Dossc - Tickler Group view for LandscapeTab
+
+	render_Tick: function() {
+		var repeatType = this.getByIndex('TicklerRepeatType');
+		var doneControl = "";
+		if (repeatType.length == 0 || repeatType.contains('Once')) {
+			// show normal done checkbox
+			doneControl = '<<toggleTag Actioned [[%0]] ->>';
+		}
+		else if (repeatType.contains('Daily'))       { doneControl = '<<addDay [[%0]]>>' }
+		else if (repeatType.contains('WorkWeekly'))  { doneControl = '<<addDayWW [[%0]]>>' }//Added by Dossc - button for WorkWeekly TicklerRepeatType
+		else if (repeatType.contains('Weekly'))      { doneControl = '<<addWeek [[%0]]>>' }
+		else if (repeatType.contains('Fortnightly')) { doneControl = '<<addFortnight [[%0]]>>' }
+		else if (repeatType.contains('Monthly'))     { doneControl = '<<addMonth [[%0]]>>' }
+		else if (repeatType.contains('Bimonthly'))   { doneControl = '<<addBimonth [[%0]]>>' }//Added by Dossc - bimonthly for WorkWeekly TicklerRepeatType
+		else if (repeatType.contains('Halfyearly'))  { doneControl = '<<addHalfyear [[%0]]>>' }//Added by Dossc - halfyearly for WorkWeekly TicklerRepeatType
+		else if (repeatType.contains('Yearly'))      { doneControl = '<<addYear [[%0]]>>' }
+
+		return this.renderUtil(
+		'{{tickler{'+'%1'+  
+		'&nbsp;[[%0]]'+
+		'}}}',
+		[
+			this.title,
+            doneControl.format([this.title])
+		]
+	);},//End Added by Dossc
+
+	render_star: function() { 
+		var pLink = '';
+		var link = store.getTiddlerSlice(this.title, "link");
+		if (link){
+			pLink += '[[link|'+link+']]'
+		}
+
+		return this.renderUtil(
+		'{{plain{'+
+		'<<singleToggleTag tag:Starred title:[[%0]]>>'+
+		'[[%0]]}}} %1',
+		//'{{notesLink{<<showNotesIcon [[%0]]>>}}}',//Removed by Dossc - takes a long time to render references; remember to move the coma
+		[
+			this.title,
+			pLink //Added by Dossc - add link to refrences for More Wiki Functions
+		]
+	);}
+	
+});
+
+//}}}

@@ -1,0 +1,20 @@
+/***
+|Name:|WorkTimeConf|
+|Description:|Configure all the WorkTime changes to mGSD|
+|Version:|1.0.0|
+|Date:|9-Aug-2013|
+|Source:|???|
+|Author:|Christopher Doss|
+|Email:|CEHDoss@gmail.com|
+|License:|???|
+***/
+//{{{
+
+config.options.txtGTDHome = 'B:\\GTD Home\\';
+
+config.options.txtTheme = 'WorkTimeTheme';
+
+/* The latest Java or TiddlyWiki doesn't seem to like me moving above my local directory */
+//config.options.txtBackupFolder = '..\\' + 'twbackup';
+
+//}}}

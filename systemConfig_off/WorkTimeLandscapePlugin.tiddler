@@ -1,0 +1,21 @@
+/***
+WorkTimeLandscapePlugin
+requires: WorkTimeMGSDPatchPlugin
+group Ticklers by TickleDate for LandscapeTab.  One day I will figure out how to make this look like a calender.
+***/
+//{{{
+
+Array.prototype.formatTickleDate = function(t) {
+		var date = Date.convertFromYYYYMMDDHHMM(t.fields['mgtd_date'])
+		var diff = date - new Date();
+		if(diff < 0) diff = 0;
+		var days = Math.ceil(diff/86400000)+'';
+		var padDays = days.length < 2?"0"+days:days;
+		var desc = '  ';
+		if(days < 1)desc += 'Today';
+		else if(days < 2)desc += 'Tommorrow';
+		else desc += config.messages.dates.days[date.getDay()];
+		return [padDays+desc];
+	}
+
+//}}}

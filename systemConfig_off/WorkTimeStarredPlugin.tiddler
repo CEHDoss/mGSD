@@ -1,0 +1,98 @@
+/***
+WorkTimeStarredPlugin
+requires: WorkTimeMGSDPatchPlugin
+
+Modify groupCountOnly to allow starred which will show all starred items allowing References that has your attention to be readily available.  Used in WTTabs.
+
+isStarred is used in several new views to focus on what has my attention.  isStarred does not use HasStarredProject because "ProjectStatus" == Starred doesn't work.
+
+***/
+//{{{
+	
+Array.prototype.renderGrouped = function(listRenderMethod,headingRenderMethod,noneHeading,renderOptions,groupCountOnly,nbTags) {
+		// do I ever use renderOptions??
+		// this lost some elegance when I shoehorned the groupCountOnly part in. todo refactor
+		// then lost some more with the nbTags addition...
+		// might need some reworking
+		// Dossc I guess I made it even worse with starred for More Wiki Functions
+		var result = "";
+		this.each(function(g) {
+			var groupName = g[0];
+			var groupItems = g[1];
+
+			var showCount = "";
+			if (groupCountOnly && groupCountOnly != "")
+				showCount = groupItems.length > 0 ? " ("+groupItems.length+")" : "";
+
+			var makeHeading = (groupCountOnly&&groupCountOnly!="") ? "" : "!!";
+			if(groupCountOnly && groupCountOnly == "starred")makeHeading = "!!";//Added by Dossc - added !! when groupCountOnly: starred for More Wiki Functions
+			var newButtonMarkup = "";
+
+			// this sucks
+			if (nbTags && nbTags != '') {
+				newButtonMarkup = " "+config.macros.mgtdList.getNewButton(nbTags + " [["+groupName+"]]");
+			}
+
+			if (groupName == "__NONE__") {
+				result = result + makeHeading + "{{noneHeading{[[("+(noneHeading?noneHeading:"No "+headingRenderMethod)+")]]}}}"+showCount+"\n";
+			}
+			else {
+				var gTiddler = store.getTiddler(groupName);
+				if (gTiddler) {
+					result = result + makeHeading+gTiddler.render(headingRenderMethod)+showCount+newButtonMarkup+"\n";
+				}
+				else {
+					result = result + makeHeading+"[["+groupName+"]]"+showCount+newButtonMarkup+"\n";
+				}
+			}
+			if (!groupCountOnly || groupCountOnly == "")
+				result = result + groupItems.render(listRenderMethod,renderOptions) + "\n";
+			//Start Added by Dossc - render starred items with groupCountOnly:starred for More Wiki Functions
+			else if(groupCountOnly && groupCountOnly == "starred"){
+				var starredItems = [];
+				groupItems.each(function(t) {
+					if(t.isStarred())starredItems.push(t);
+				});
+				result = result + starredItems.render(listRenderMethod,renderOptions) + "\n";
+			}
+			//End Added by Dossc
+		});
+			
+		if (groupCountOnly && groupCountOnly != "")
+			result = result.replace(/\n$/,''); // hack. remove trailing linefeed
+
+		return result;
+	}
+
+config.indexedTags.tiddlerMethods.isStarred = function() {
+			if(this.isTagged("Starred"))return true;
+			//if(!this.isTagged("Action"))return false; //Removed by Dossc - I want to include references
+			var projs = this.getByIndex("Project");
+
+			if (projs.length == 0)
+				return false;
+
+			for (var i=0;i<projs.length;i++)
+				if (
+					(store.fetchTiddler(projs[i]).isTagged("Starred"))
+					&&
+					!store.fetchTiddler(projs[i]).tags.contains('Complete') // seems stupid
+					)
+					return true;
+			return false;
+		}
+		
+config.indexedTags.tiddlerMethods.hasSubProject = function() {
+		var children = fastTagged(this.title).filterByTagExpr('Project && !Complete');// && (Active || Queued)
+		if(children.length <= 0){
+			children = fastTagged(this.title).filterByTagExpr('Area')
+			for(var i = 0; i < children.length;i++){
+				if(fastTagged(children[i].title).filterByTagExpr('Project && !Complete').length > 0)return true;
+			}
+			return false;
+		}else return true;
+		//return children.length > 0;
+    }
+
+merge(Tiddler.prototype,config.indexedTags.tiddlerMethods);
+//}}}
