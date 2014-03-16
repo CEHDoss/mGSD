@@ -15,7 +15,8 @@ config.mGTD.specialTags = [
   "View",
   "Tickler",
   "Reference",
-  "Contact"
+  "Contact",
+  "Scratch"
 ];
 
 config.mGTD.tagsToIndex = [
