@@ -183,6 +183,10 @@ make_tw {
     get_tiddler(File.basename(t,'.tiddler')).add_tag('View').add_tag('Do').add_tag('Starred')
   end
 
+  add_tiddlers_from_dir("systemConfig").each do |t|
+    get_tiddler(File.basename(t,'.tiddler')).add_tag('systemConfig').add_tag('excludeSearch')
+  end
+
   # generate some content
   content = ""
 
