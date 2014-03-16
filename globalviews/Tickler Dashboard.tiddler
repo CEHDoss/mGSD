@@ -8,7 +8,6 @@
 <<mgtdList title:'Upcoming Ticklers (next 7 days)'
        startTag:Tickler
        tags:'!Actioned'
-       view:Tickler
        mode:global
        newButtonTags:'Tickler Once'
        where:'tiddler.ticklerWillBeActiveWithin(7)'
@@ -20,7 +19,6 @@
 <<mgtdList title:'Upcoming Ticklers'
 	startTag:Tickler
 	tags:'!Actioned'
-	view:Tickler
 	mode:global
 	newButtonTags:'Tickler Once'
     where:'(!tiddler.fields.mgtd_date || !tiddler.ticklerIsActive()) && !tiddler.ticklerWillBeActiveWithin(7)'
@@ -37,7 +35,6 @@
 	title:'Old Ticklers'
 	startTag:Tickler
 	tags:'Actioned'
-	view:Tickler
 	mode:global
 	newButtonTags:'Tickler Actioned Once'
 >>

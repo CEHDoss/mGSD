@@ -2,10 +2,8 @@
 	newButtonTags:'Action Next'
 	mode:global
 	group:Focus
-	gView:GenericGroup
 	gSort:prioritySlice
 	startTag:Action
-	view:Generic
 	tags:'Next && !Done && !Agenda && Starred'
 	where:'!tiddler.hasParent("Project")'
 >>

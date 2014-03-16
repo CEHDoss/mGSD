@@ -5,17 +5,15 @@
 {{col{
 
 <<mgtdList startTag:Action title:'Next' tags:'Next && !Done'
-view:Action mode:global
+mode:global
        group:Project
-       gView:bold
        newButtonTags:'Action Next'
        where:tiddler.hasActiveProject()
        >>
 
 <<mgtdList startTag:Action title:'Waiting' tags:'[(Waiting For)] && !
-Done' view:Action mode:global
+Done' mode:global
        group:Project
-       gView:bold
        where:tiddler.hasActiveProject()
        newButtonTags:'Action [(Waiting For)]'
        >>
@@ -26,23 +24,20 @@ Done' view:Action mode:global
 {{col{
 
 <<mgtdList title:'Starred Actions' startTag:Starred tags:'Action && !
-Done' view:ActionProj mode:global
+Done' mode:global
        group:ActionStatus
-       gView:bold
        newButtonTags:'Starred Action'
        >>
 
 <<mgtdList title:'Starred Projects' startTag:Starred tags:'Project && !
-Complete' view:Project mode:global
+Complete' mode:global
        group:FocusStatus
-       gView:bold
        newButtonTags:'Starred Project'
        >>
 
 <<mgtdList title:'Other Starred Items' startTag:Starred tags:'!Project
-&& !Action' view:star mode:global
+&& !Action' mode:global
        group:GTDComponent
-       gView:bold
        newButtonTags:'Starred'
        >>
 

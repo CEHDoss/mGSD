@@ -4,37 +4,33 @@
 
 <div class="col">
 
-	[[WTTagDashboards##Ticklers Requiring Action]]
+	[[TagDashboards##Ticklers Requiring Action]]
 
 	<!-- Modified by Dossc - sort by Priority for Priority System -->
 	<div macro="mgtdList title:'Next Actions' 
 		ignoreRealm:yes
 		group:Context
-		gView:GenericGroup
 		gSort:orderSlice
-		view:Generic
 		sort:prioritySlice
 		newButtonTags:'Action Next'
 		tags:'Action && Next && !Done'
 	"></div>
 
-	<div macro="mgtdList title:'Waiting Actions by Person' tags:'Action && [(Waiting For)] && !Done' view:Action
+	<div macro="mgtdList title:'Waiting Actions by Person' tags:'Action && [(Waiting For)] && !Done'
 		ignoreRealm:yes
 		dontShowEmpty:yes
 		group:Contact
-		gView:GenericGroup
 		newButtonTags:'Action [(Waiting For)]'
 	"></div>
 
-	<div macro="mgtdList title:'Future Actions' tags:'Action && Future && !Done' view:Action
+	<div macro="mgtdList title:'Future Actions' tags:'Action && Future && !Done'
 		ignoreRealm:yes
 		dontShowEmpty:yes
 		group:Context
-		gView:GenericGroup
 		newButtonTags:'Action Future'
 		"></div>
 
-		<div macro="mgtdList title:'Done Actions' tags:'Action && Done' view:Generic
+		<div macro="mgtdList title:'Done Actions' tags:'Action && Done'
 		ignoreRealm:yes
 		dontShowEmpty:yes
 		newButtonTags:'Action Done Next'
@@ -44,22 +40,21 @@
 </div>
 <div class="col">
 
-	<div macro="mgtdList title:'Active Subprojects' tags:'Project && !Complete' view:Generic
+	<div macro="mgtdList title:'Active Subprojects' tags:'Project && !Complete'
 		ignoreRealm:yes
 		group:FocusStatus
-		gView:GenericGroup
 		newButtonTags:'Project'
 		"></div>
 
-	<div macro="mgtdList title:'Completed Subprojects' tags:'Project && Complete' view:Generic
+	<div macro="mgtdList title:'Completed Subprojects' tags:'Project && Complete'
 		ignoreRealm:yes
 		dontShowEmpty:yes
 		"></div>
 
 <!-- Removed by Dossc - remove remarks because it is covered by all other GTDComponents
-	[\[WTTagDashboards##Upcoming Ticklers]\]
+	[\[TagDashboards##Upcoming Ticklers]\]
 
-	<div macro="mgtdList title:'Reference Items' tags:'Reference' view:plain newButtonTags:'Reference' 
+	<div macro="mgtdList title:'Reference Items' tags:'Reference' newButtonTags:'Reference' 
 		ignoreRealm:yes
 		"></div>
 //-->
@@ -70,13 +65,11 @@
 	<div macro="mgtdList title:'Full Component List'
 		newButtonTags:' '
 		group:GTDComponent
-		gView:GenericGroup
 		gSort:orderSlice
 		gWhere:tiddler.title!='Starred'
-		view:Generic
 		sort:orderSlice
 		tags:'!excludeSearch && !Project && !Action && !Actioned'
-		"></div>
+	"></div>
 
 </div>
 <!-- End Added by Dossc //-->
@@ -94,7 +87,6 @@
 	<!-- Start Modified by Dossc - Replaced Next List for Starred Method //-->
 	<div macro="mgtdList title:'Starred Actions'
 		tags:'Action && Next && !Done && !Agenda'
-		view:Generic
 		sort:Priority
 		newButtonTags:'Action Next Starred'
 		where:tiddler.isStarred()&&(!tiddler.hasParent('Project')||tiddler.hasActiveProject())
@@ -102,7 +94,6 @@
 
 	<div macro="mgtdList title:'Non Starred Actions'
 		tags:'Action && Next && !Done && !Agenda'
-		view:Generic
 		sort:Priority
 		newButtonTags:'Action Next'
 		where:!tiddler.isStarred()&&(!tiddler.hasParent('Project')||tiddler.hasActiveProject())
@@ -112,12 +103,12 @@
 </div>
 <div class="col">
 
-	<div macro="mgtdList title:'Waiting' tags:'Action && [(Waiting For)] && !Done' view:Generic
+	<div macro="mgtdList title:'Waiting' tags:'Action && [(Waiting For)] && !Done'
 		newButtonTags:'Action [(Waiting For)]'
 		where:tiddler.hasActiveProject()||!tiddler.hasParent('Project')
 		"></div>
 
-	<div macro="mgtdList title:'Future' tags:'Action && Future && !Done' view:Generic
+	<div macro="mgtdList title:'Future' tags:'Action && Future && !Done'
 		newButtonTags:'Action Future'
 		where:tiddler.hasActiveProject()||!tiddler.hasParent('Project')
 		"></div>
@@ -134,15 +125,14 @@
 
 <div class="col">
 
-	<div macro="mgtdList title:'Delegated Actions' tags:'Action && !Done && [(Waiting For)]' view:Generic
+	<div macro="mgtdList title:'Delegated Actions' tags:'Action && !Done && [(Waiting For)]'
 		ignoreRealm:yes
 		newButtonTags:'Action [(Waiting For)]'
 		"></div>
 
-	<div macro="mgtdList title:'Associated Actions' tags:'Action && !Done && ![(Waiting For)]' view:Generic
+	<div macro="mgtdList title:'Associated Actions' tags:'Action && !Done && ![(Waiting For)]'
 		ignoreRealm:yes
 		group:ActionStatus
-		gView:GenericGroup
 		newButtonTags:'Action'
 		"></div>
 
@@ -150,25 +140,24 @@
 </div>
 <div class="col">
 
-	<div macro="mgtdList title:'Associated Projects' tags:'Project && !Complete' view:Generic
+	<div macro="mgtdList title:'Associated Projects' tags:'Project && !Complete'
 		ignoreRealm:yes
 		group:FocusStatus
-		gView:GenericGroup
 		newButtonTags:'Project'
 		"></div>
 
-	<div macro="mgtdList title:'Associated Ticklers' tags:'Tickler && !Actioned' view:Generic
+	<div macro="mgtdList title:'Associated Ticklers' tags:'Tickler && !Actioned'
 		ignoreRealm:yes
 		newButtonTags:'Tickler Once'
 		sort:tickleDate
 		"></div>
 
-	<div macro="mgtdList title:'Done Actions' tags:'Action && Done' view:Generic
+	<div macro="mgtdList title:'Done Actions' tags:'Action && Done'
 		ignoreRealm:yes
 		newButtonTags:Done
 		"></div>
 
-	<div macro="mgtdList title:'Completed Projects' tags:'Project && Complete' view:Generic
+	<div macro="mgtdList title:'Completed Projects' tags:'Project && Complete'
 		ignoreRealm:yes
 		newButtonTags:'Project'
 		"></div>
@@ -187,7 +176,6 @@
 	<div macro="mgtdList title:'Projects'
 		newButtonTags:'Project Active'
 		ignoreRealm:yes
-		view:Generic
 		sort:status
 		tags:'Project && !Complete'
 		"></div>
@@ -196,8 +184,6 @@
 		newButtonTags:'Action' 
 		ignoreRealm:yes
 		group:Context
-		gView:GenericGroup
-		view:Action
 		sort:status
 		tags:'Action && !Done'
 		"></div>
@@ -208,7 +194,6 @@
 	<div macro="mgtdList title:'Complete'
 		dontShowEmpty:yes
 		ignoreRealm:yes
-		view:Generic
 		sort:status
 		tags:'(Action || Project) && (Done || Complete)'
 		"></div>
@@ -217,10 +202,8 @@
 	<div macro="mgtdList title:'Full Component List'
 		newButtonTags:' '
 		group:GTDComponent
-		gView:GenericGroup
 		gSort:orderSlice
 		gWhere:tiddler.title!='Starred'
-		view:Generic
 		sort:orderSlice
 		tags:'!excludeSearch && !Project && !Action && !Actioned'
 		"></div>
@@ -241,7 +224,7 @@
 !Ticklers Requiring Action
 <!--{{{-->
 <!--- included by other sections --->
-<div macro="mgtdList title:'Ticklers Requiring Action' tags:'Tickler && !Actioned' view:Generic newButtonTags:'Tickler Once'
+<div macro="mgtdList title:'Ticklers Requiring Action' tags:'Tickler && !Actioned' newButtonTags:'Tickler Once'
 	ignoreRealm:yes
 	dontShowEmpty:yes
 	where:'tiddler.ticklerIsActive()'
@@ -253,7 +236,7 @@
 !Upcoming Ticklers 
 <!--{{{-->
 <!--- included by other sections --->
-<div macro="mgtdList title:'Upcoming Ticklers' tags:'Tickler && !Actioned' view:Generic newButtonTags:'Tickler Once'
+<div macro="mgtdList title:'Upcoming Ticklers' tags:'Tickler && !Actioned' newButtonTags:'Tickler Once'
 	ignoreRealm:yes
 	where:'!tiddler.ticklerIsActive()'
 	sort:tickleDate

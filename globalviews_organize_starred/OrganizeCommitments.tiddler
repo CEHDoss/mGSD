@@ -1,48 +1,37 @@
 <<mgtdList title:'These have either no realm or a different realm to their parent'
 	tags:'Action || Project'
-	view:Generic
 	mode:global
 	ignoreRealm:yes
 	where:"tiddler.realmMismatchWithParent('Project')||tiddler.realmMismatchWithParent('Area')"
 	group:Focus
-	gView:GenericGroup
->><<mgtdList title:'Projects with no (Area or Project)'
+	>><<mgtdList title:'Projects with no (Area or Project)'
 	startTag:Focus
-	view:Generic
 	mode:global
 	where:'!tiddler.hasParent("Area") && !tiddler.hasParent("Project")'
 >><<mgtdList title:'Actions with no (Area or Project) or no Context'
 	startTag:Action
-	view:Generic
 	mode:global
 	group:Context
-	gView:GenericGroup
 	where:'(!tiddler.hasParent("Area") && !tiddler.hasParent("Project")) || !tiddler.hasParent("Context")'
 >><<mgtdList title:'Waiting For Actions with no Contact'
 	startTag:Action
-	view:Generic
 	tags:'[(Waiting For)]'
 	mode:global
 	group:Context
-	gView:GenericGroup
 	where:'tiddler.getParent("Contact") == ""'
 >><<mgtdList title:'Agenda Actions with no Contact'
 	startTag:Action
-	view:Generic
 	tags:'Agenda'
 	mode:global
 	group:Context
-	gView:GenericGroup
 	where:'tiddler.getParent("Contact") == ""'
 >><<mgtdList title:'Ticklers with no Area or Project'
 	startTag:Tickler
-	view:Generic
 	mode:global
 	sort:'tickleDate'
 	where:'(!tiddler.hasParent("Area") && !tiddler.hasParent("Project"))'
 >><<mgtdList title:'References with no Area or Project'
 	startTag:Reference
-	view:Generic
 	mode:global
 	sort:title
 	where:'(!tiddler.hasParent("Area") && !tiddler.hasParent("Project"))'

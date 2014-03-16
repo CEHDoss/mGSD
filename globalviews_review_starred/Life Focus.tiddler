@@ -1,24 +1,20 @@
 <<mgtdList title:'Visions @@without@@ Area'
 	newButtonTags:'Vision'
 	startTag:Vision
-	view:plain
 	sort:prioritySlice
 	tags:'!Complete'
 	where:'fastTagged(tiddler.title).filterByTagExpr("Area")==0'
 >><<mgtdList title:'Areas @@without@@ visions (w/o [[DMwLS|Do More with Less Stress]])'
 	dontShowEmpty:yes
 	startTag:Area
-	view:plain
 	sort:prioritySlice
 	tags:'!Complete'
 	where:'!tiddler.hasParent("Vision")'
 >><<mgtdList title:'Areas @@without@@ actions (w/o [[DMwLS|Do More with Less Stress]])'
 	dontShowEmpty:yes
 	group:Vision
-	gView:GenericGroup
 	gSort:prioritySlice
 	startTag:Area
-	view:plain
 	sort:prioritySlice
 	tags:'!Complete'
 	where:'!tiddler.isTagged("Do More with Less Stress")&&!tiddler.hasNextActionOrSubProjectOrTickler()&&tiddler.hasParent("Vision")'
@@ -27,9 +23,7 @@
 	dontShowEmpty:yes
 	mode:global
 	group:Focus
-	gView:GenericGroup
 	startTag:Focus
-	view:Generic
 	sort:Vision
 	tags:'!Complete && Active && !Goal'
 	where:!tiddler.hasNextActionOrSubProjectOrTickler()
@@ -37,10 +31,8 @@
 	mode:global
 	groupCountOnly:starred
 	group:Focus
-	gView:GenericGroup
 	gSort:Vision
 	gWhere:'tiddler.hasParent("Vision")'
-	view:Generic
 	sort:Generic
 	tags:'(Action || Project) && !Complete && !Done && !GTD'
 >>

@@ -3,10 +3,8 @@
 	dontShowEmpty:yes
 	mode:global
 	group:Context
-	gView:GenericGroup
 	gSort:orderSlice
 	startTag:Action
-	view:Generic
 	tags:'Next && !Done && !Agenda'
 	where:tiddler.isStarred()
 >>

@@ -3,18 +3,18 @@
 	mode:global
 	group:Focus
 	groupCountOnly:starred
-	gView:bold
 	gSort:prioritySlice
 	startTag:View
+	view:link
 	sort:title
 >><<mgtdList title:'[[DoByContext|Next Actions]]'
 	newButtonTags:'Action Next Starred'
 	mode:global
-	startTag:Action
 	group:Context
 	groupCountOnly:yes
-	gView:plain
 	gSort:orderSlice
+	startTag:Action
+	view:link
 	tags:'Next && !Done'
 	where:tiddler.hasActiveProject()
 >>

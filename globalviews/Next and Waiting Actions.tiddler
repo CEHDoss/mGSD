@@ -3,19 +3,19 @@
 
 {{col{
 
-<<mgtdList startTag:Action title:'Next' tags:'Next && !Done' view:ActionProj mode:global
+<<mgtdList startTag:Action title:'Next' tags:'Next && !Done' mode:global
 	newButtonTags:'Action Next'
 	where:tiddler.hasActiveProject()
-	>>
+>>
 
 }}}
 
 {{col{
 
-<<mgtdList startTag:Action title:'Waiting' tags:'[(Waiting For)] && !Done' view:ActionProj mode:global
+<<mgtdList startTag:Action title:'Waiting' tags:'[(Waiting For)] && !Done' mode:global
 	newButtonTags:'Action [(Waiting For)]'
 	where:tiddler.hasActiveProject()
-	>>
+>>
 
 }}}
 

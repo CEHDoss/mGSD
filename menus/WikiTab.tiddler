@@ -3,12 +3,11 @@
 	groupCountOnly:starred
 	mode:global
 	group:Focus
-	gView:bold
 	gSort:orderSlice
+	gWhere:!tiddler.isTagged("Complete")
 	view:link
 	sort:orderSlice
 	tags:'(Reference || Scratch) && !Done'
-	where:'tiddler.hasParent("Area") || (tiddler.hasParent("Project") && !store.getTiddler(tiddler.getParent("Project")).isTagged("Complete"))'
 >>
 {{tiny{
 <slider Advanced>

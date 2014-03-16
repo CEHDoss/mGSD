@@ -3,20 +3,19 @@
 
 {{col{
 
-<<mgtdList title:'Someday/Maybe Projects' startTag:Focus tags:'Someday/Maybe && !Complete' view:ProjectArea mode:global
+<<mgtdList title:'Someday/Maybe Projects' startTag:Focus tags:'Someday/Maybe && !Complete' mode:global
 	newButtonTags:'Project Someday/Maybe'
-	>>
+>>
 
 }}}
 
 {{col{
 
-<<mgtdList title:'Future Actions not in Projects' startTag:Action tags:'Future && !Done' view:Action mode:global
+<<mgtdList title:'Future Actions not in Projects' startTag:Action tags:'Future && !Done' mode:global
 	group:Context
-	gView:Context
 	newButtonTags:'Action Future'
 	where:!tiddler.hasParent('Project')
-	>>
+>>
 
 
 }}}

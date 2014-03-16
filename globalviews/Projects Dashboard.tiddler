@@ -2,25 +2,25 @@
 
 {{col{
 
-<<mgtdList title:'Active Projects' startTag:Focus tags:'Active && !Complete' view:ProjectArea mode:global
+<<mgtdList title:'Active Projects' startTag:Focus tags:'Active && !Complete' mode:global
 	newButtonTags:'Project Active'
-	>>
+>>
 
-<<mgtdList title:'Active Projects' startTag:Focus tags:'Queued && !Complete' view:ProjectArea mode:global
+<<mgtdList title:'Active Projects' startTag:Focus tags:'Queued && !Complete' mode:global
 	newButtonTags:'Project Active'
-	>>
+>>
 
 }}}
 
 {{col{
 
-<<mgtdList title:'Someday/Maybe Projects' startTag:Focus tags:'Someday/Maybe && !Complete' view:ProjectArea mode:global
+<<mgtdList title:'Someday/Maybe Projects' startTag:Focus tags:'Someday/Maybe && !Complete' mode:global
 	newButtonTags:'Project Someday/Maybe'
-	>>
+>>
 
 
 {{scroll10{
-<<mgtdList title:'Completed Projects' startTag:Focus tags:'Complete' view:ProjectComplete mode:global>>
+<<mgtdList title:'Completed Projects' startTag:Focus tags:'Complete' mode:global>>
 }}}
 
 }}}

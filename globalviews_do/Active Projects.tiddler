@@ -2,8 +2,7 @@
 	newButtonTags:'Project Active'
 	dontShowEmpty:yes
 	mode:global
-	startTag:Focus
-	view:Generic
+	startTag:Project
 	sort:title
 	tags:'Active && !Complete'
 >>

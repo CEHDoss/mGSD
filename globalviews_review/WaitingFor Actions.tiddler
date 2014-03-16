@@ -15,9 +15,7 @@
 	newButtonTags:'Action Future'
 	mode:global
 	group:Project
-	gView:GenericGroup
 	startTag:Action
-	view:Generic
 	tags:'Future && !Done'
 	where:'!tiddler.hasParent("Action")&&tiddler.hasParent("Project")'
 >><<mgtdList
@@ -25,10 +23,8 @@
 	startTag:Action
 	tags:'Future && !Done'
 	where:'tiddler.hasParent("Action")'
-	view:Generic
 	mode:global
 	group:Action
-	gView:GenericGroup
 	newButtonTags:'Action Future'
 >>
 

@@ -3,7 +3,6 @@
 	dontShowEmpty:yes
 	mode:global
 	startTag:Focus
-	view:Generic
 	sort:title
 	tags:'Active && !Complete && Starred'
 >>

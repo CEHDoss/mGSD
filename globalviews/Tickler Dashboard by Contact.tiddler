@@ -8,9 +8,7 @@
     title:'Ticklers Requiring Action Grouped'
     startTag:Tickler
     tags:'!Actioned'
-    view:Tickler
     group:Contact
-    gView:bold
     mode:global
     newButtonTags:'Tickler Enabled Once'
     where:'tiddler.ticklerIsActive()'
@@ -23,9 +21,7 @@
     title:'Upcoming Ticklers Grouped (next 7 days)'
     startTag:Tickler
     tags:'!Actioned'
-    view:Tickler
     group:Contact
-    gView:bold
     mode:global
     newButtonTags:'Tickler Enabled Once'
     where:'tiddler.ticklerWillBeActiveWithin(7)'
@@ -41,9 +37,7 @@
     title:'Upcoming Ticklers Grouped'
     startTag:Tickler
     tags:'!Actioned'
-    view:Tickler
     group:Contact
-    gView:bold
     mode:global
     newButtonTags:'Tickler Enabled Once'
     where:'(!tiddler.fields.mgtd_date || !tiddler.ticklerIsActive()) && !tiddler.ticklerWillBeActiveWithin(7)'

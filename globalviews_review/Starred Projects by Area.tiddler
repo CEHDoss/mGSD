@@ -1,10 +1,8 @@
 <<mgtdList title:'[[Starred Projects by Area]]'
 	startTag:Focus
 	tags:'Active && !Complete && Starred'
-	view:Generic
 	sort:Priority
 	group:Focus
-	gView:GenericGroup
 	gSort:title
 	mode:global
 	dontShowEmpty:yes

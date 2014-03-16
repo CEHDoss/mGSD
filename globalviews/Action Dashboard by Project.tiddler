@@ -5,41 +5,37 @@
 
 <<tiddler 'Ticklers Requiring Action'>>
 
-<<mgtdList title:'Next Actions' startTag:Action tags:'Next && !Done' view:Action mode:global
+<<mgtdList title:'Next Actions' startTag:Action tags:'Next && !Done' mode:global
 	group:Project
-	gView:bold
 	where:tiddler.hasActiveProject()
 	newButtonTags:'Action Next'
-	>>
+>>
 
-<<mgtdList title:'Waiting Actions' startTag:Action tags:'[(Waiting For)] && !Done' view:Action mode:global
+<<mgtdList title:'Waiting Actions' startTag:Action tags:'[(Waiting For)] && !Done' mode:global
 	group:Project
-	gView:bold
 	where:tiddler.hasActiveProject()
 	newButtonTags:'Action [(Waiting For)]'
-	>>
+>>
 
 }}}
 
 {{col{
 
-<<mgtdList title:'Future Actions' startTag:Action tags:'Future && !Done' view:Action mode:global
+<<mgtdList title:'Future Actions' startTag:Action tags:'Future && !Done' mode:global
 	group:Project
-	gView:bold
 	where:tiddler.hasActiveProject()
 	newButtonTags:'Action Future'
-	>>
+>>
 
 
 {{scroll10{
 
-<<mgtdList title:'Done Actions' startTag:Action tags:'Done' view:DoneAction mode:global
+<<mgtdList title:'Done Actions' startTag:Action tags:'Done' mode:global
 	group:Project
-	gView:bold
 	sort:-modified
 	newButtonTags:'Action Next Done'
 	where:tiddler.hasActiveProject()
-	>>
+>>
 
 }}}
 

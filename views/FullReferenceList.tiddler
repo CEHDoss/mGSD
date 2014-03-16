@@ -2,10 +2,8 @@
 	newButtonTags:'Reference'
 	mode:global
 	group:Focus
-	gView:GenericGroup
 	gSort:prioritySlice
 	startTag:Reference
-	view:Generic
 	sort:orderSlice
 	where:'(tiddler.hasParent("Project") || tiddler.hasParent("Area")) || (tiddler.hasParent("Project") && !store.getTiddler(tiddler.getParent("Project")).isTagged("Complete"))'
 >>

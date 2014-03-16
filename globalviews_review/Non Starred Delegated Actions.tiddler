@@ -3,9 +3,7 @@
 	dontShowEmpty:yes
 	mode:global
 	group:Focus
-	gView:GenericGroup
 	startTag:Action
-	view:Generic
 	tags:'[(Waiting For)] && !Done && !Agenda'
 	where:'tiddler.hasActiveProject()&&!tiddler.isStarred()'
 >>

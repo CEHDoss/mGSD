@@ -1,10 +1,8 @@
 <<mgtdList
 	title:FullViewList
 	startTag:View
-	view:Generic
 	sort:orderSlice
 	group:Focus
-	gView:GenericGroup
 	gSort:prioritySlice
 	mode:global
 	newButtonTags:'View'

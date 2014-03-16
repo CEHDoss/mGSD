@@ -3,10 +3,8 @@
 	mode:global
 	startTag:Focus
 	tags:'Complete'
-	view:ProjectComplete
 	group:day
-	gView:bold
 	gSort:-title
 	newButtonTags:'Project Complete'
 	sort:-modified
-	>>
+>>

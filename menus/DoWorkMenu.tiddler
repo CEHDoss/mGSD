@@ -11,7 +11,7 @@
 [[Done Actions]]
 
 <slider+ Contexts>
-<<mgtdList startTag:Action tags:'Next && !Done' groupCountOnly:yes group:Context gView:plain where:tiddler.hasActiveProject()>>
+<<mgtdList startTag:Action tags:'Next && !Done' groupCountOnly:yes group:Context where:tiddler.hasActiveProject()>>
 </slider>
 <slider Grouped by Project>
 [[Next Actions|Next Actions by Project]]

@@ -3,8 +3,6 @@
 	dontShowEmpty:yes
 	mode:global
 	group:Contact
-	gView:GenericGroup
 	startTag:Action
-	view:Generic
 	tags:'!Done && Agenda'
 >>

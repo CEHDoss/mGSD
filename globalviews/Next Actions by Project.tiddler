@@ -1,6 +1,5 @@
-<<mgtdList startTag:Action tags:'Next && !Done' view:Action mode:global
+<<mgtdList startTag:Action tags:'Next && !Done' mode:global
 	group:Project
-	gView:bold
 	newButtonTags:'Action Next'
 	where:tiddler.hasActiveProject()
-	>>
+>>

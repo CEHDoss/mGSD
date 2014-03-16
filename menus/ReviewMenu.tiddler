@@ -12,7 +12,7 @@
 [[Subprojects]]
 
 <slider+ Areas>
-<<mgtdList startTag:Focus tags:'Active && !Complete' groupCountOnly:yes group:Focus gView:plain>>
+<<mgtdList startTag:Focus tags:'Active && !Complete' groupCountOnly:yes group:Focus>>
 </slider>
 <slider All areas>
 <<mgtdList startTag:Area>>

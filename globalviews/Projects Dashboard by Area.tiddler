@@ -3,28 +3,25 @@
 
 {{col{
 
-<<mgtdList title:'Active Projects' startTag:Focus tags:'Active && !Complete' view:Project mode:global
+<<mgtdList title:'Active Projects' startTag:Focus tags:'Active && !Complete' mode:global
 	group:Focus
-	gView:bold
 	newButtonTags:'Project Active'
-	>>
+>>
 
 }}}
 
 {{col{
 
-<<mgtdList title:'Someday/Maybe Projects' startTag:Focus tags:'Someday/Maybe && !Complete' view:Project mode:global
+<<mgtdList title:'Someday/Maybe Projects' startTag:Focus tags:'Someday/Maybe && !Complete' mode:global
 	group:Focus
-	gView:bold
 	newButtonTags:'Project Someday/Maybe'
-	>>
+>>
 
 {{scroll10{
-<<mgtdList title:'Completed Projects' startTag:Focus tags:'Complete' view:ProjectComplete mode:global
+<<mgtdList title:'Completed Projects' startTag:Focus tags:'Complete' mode:global
 	group:Focus
-	gView:bold
 	newButtonTags:'Project Active Complete'
-	>>
+>>
 
 }}}
 

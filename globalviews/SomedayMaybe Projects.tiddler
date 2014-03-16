@@ -1,11 +1,9 @@
 <<mgtdList title:'[[Someday/Maybe Projects]]'
 	startTag:Focus
 	tags:'Someday/Maybe && !Complete'
-	view:Generic
 	mode:global
 	group:Focus
-	gView:GenericGroup
 	sort:Priority
 	gSort:prioritySlice
 	newButtonTags:'Project Someday/Maybe'
-	>>
+>>

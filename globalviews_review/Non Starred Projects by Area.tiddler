@@ -1,1 +1,1 @@
-<<mgtdList title:'[[Non Starred Projects by Area]]'	startTag:Focus	tags:'!Starred && Active && !Complete'	view:Generic	sort:Priority	group:Focus	gView:GenericGroup	gSort:prioritySlice	mode:global	newButtonTags:'Project Active'>>
+<<mgtdList title:'[[Non Starred Projects by Area]]'	startTag:Focus	tags:'!Starred && Active && !Complete'	sort:Priority	group:Focus	gSort:prioritySlice	mode:global	newButtonTags:'Project Active'>>

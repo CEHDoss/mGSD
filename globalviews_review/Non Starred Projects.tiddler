@@ -1,7 +1,6 @@
 <<mgtdList title:'[[Non Starred Projects]]'
 	startTag:Focus
 	tags:'!Starred && Active && !Complete'
-	view:Generic
 	mode:global
 	sort:title
 	newButtonTags:'Project Active'

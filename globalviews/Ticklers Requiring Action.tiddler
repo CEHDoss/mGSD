@@ -3,8 +3,9 @@
 	newButtonTags:'Tickler Once'
 	dontShowEmpty:yes
 	mode:global
+	group:Realm
+	gSort:orderSlice
 	startTag:Tickler
-	view:Generic
 	sort:title
 	tags:'!Actioned'
 	where:'tiddler.ticklerIsActive()'

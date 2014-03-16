@@ -4,7 +4,6 @@
 	mode:global
 	group:Horizon
 	startTag:Focus
-	view:Generic
 	sort:title
 	tags:'Active && !Complete'
 >>

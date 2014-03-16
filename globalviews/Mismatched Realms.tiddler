@@ -6,13 +6,11 @@ Fix these manually. These have either no realm or a different realm to their par
 <<mgtdList
 	title:'Action/Project mismatch'
 	startTag:Action
-	view:star
 	mode:global
 	ignoreRealm:yes
 	where:"tiddler.realmMismatchWithParent('Project')"
 	group:Project
-	gView:bold
-	>>
+>>
 
 }}}
 
@@ -21,23 +19,20 @@ Fix these manually. These have either no realm or a different realm to their par
 <<mgtdList
 	title:'Projects/Area mismatch'
 	startTag:Focus
-	view:star
 	mode:global
 	ignoreRealm:yes
 	where:"tiddler.realmMismatchWithParent('Area')"
 	group:Focus
-	gView:bold
-	>>
+>>
 
 
 <<mgtdList
 	title:'Subproject/parent project mismatch'
 	startTag:Focus
-	view:star
 	mode:global
 	ignoreRealm:yes
 	where:"tiddler.realmMismatchWithParent('Project')"
-	>>
+>>
 
 
 }}}

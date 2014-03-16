@@ -1,4 +1,4 @@
-<<mgtdList title:'Next Actions' startTag:Action tags:'Next && !Done' view:ActionProj mode:global
+<<mgtdList title:'Next Actions' startTag:Action tags:'Next && !Done' mode:global
 	where:tiddler.hasActiveProject()
 	newButtonTags:'Action Next'
 >>

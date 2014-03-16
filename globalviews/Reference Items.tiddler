@@ -3,23 +3,21 @@
 
 {{col{
 
-<<mgtdList title:'Reference Items For Active Projects' tag:Reference startTag:Reference view:plain mode:global
+<<mgtdList title:'Reference Items For Active Projects' tag:Reference startTag:Reference mode:global
 	group:Project
-	gView:bold
 	newButtonTags:'Reference'
 	where:tiddler.hasActiveProject()
-	>>
+>>
 
 }}}
 
 {{col{
 
-<<mgtdList title:'Other Reference Items' tag:Reference startTag:Reference view:plain mode:global
+<<mgtdList title:'Other Reference Items' tag:Reference startTag:Reference mode:global
 	group:Project
-	gView:bold
 	newButtonTags:'Reference'
 	where:!tiddler.hasActiveProject()
-	>>
+>>
 
 }}}
 

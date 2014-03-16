@@ -3,7 +3,6 @@
 	dontShowEmpty:yes
 	mode:global
 	startTag:Tickler
-	view:Generic
 	sort:title
 	tags:'!Actioned && Starred'
 	where:'tiddler.ticklerIsActive()'
