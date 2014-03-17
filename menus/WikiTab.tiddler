@@ -3,6 +3,7 @@
 	groupCountOnly:starred
 	mode:global
 	group:Focus
+	gView:bold
 	gSort:orderSlice
 	gWhere:!tiddler.isTagged("Complete")
 	view:link
