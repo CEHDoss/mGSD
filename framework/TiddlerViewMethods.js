@@ -106,7 +106,7 @@ merge(Tiddler.prototype,{
         controls['css'] = 'action';
         controls['done'] = '<<toggleTag Done [[%0]] ->>';
         controls['state'] = '<<multiToggleTag tag:ActionStatus title:[[%0]]>>';
-        controls['delete'] += '<<newSavedTiddler prompt:"Enter name for new Action:" tooltip:"Create a new Action" label:"+" tag:"%0">>'.format([
+        controls['delete'] += '<<newSavedTiddler prompt:"Enter name for new Action:" tooltip:"Create a new Action" label:"+" tag:"[[%0]]">>'.format([
           String.encodeTiddlyLinkList(this.tags)]);
         return controls;
     },
@@ -151,6 +151,7 @@ merge(Tiddler.prototype,{
             controls['state'] = '<<multiToggleTag tag:FocusStatus title:[[%0]]>>';
             controls['note'] += ' ' + this.modified.prettyDate();
         }
+        controls['delete'] += '<<newSavedTiddler prompt:"Enter name for new Action:" tooltip:"Create a new Action" label:"+" tag:"[[%0]] Next Action">>';
         
         return controls;
     },
