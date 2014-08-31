@@ -1,0 +1,8 @@
+<<mgtdList title:'[[The 6 Horizons of Focus]]'
+	newButtonTags:'Focus'
+	mode:global
+	group:Horizon
+	gSort:prioritySlice
+	startTag:Focus
+	sort:prioritySlice
+>>

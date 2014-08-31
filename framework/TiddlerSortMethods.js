@@ -20,6 +20,46 @@ merge(Tiddler.prototype,{
     return "" + orderSlice + this.title;//order by order and title
     //TODO: make this better with different variables
   },
+  
+  sort_Priority: function() {
+    var tiddlerPriority = 9;
+    var tiddlerP = this.getParent("Priority");
+    if(tiddlerP){
+      var tiddlerPslice = store.getTiddlerSlice(tiddlerP,"priority");
+      if(tiddlerPslice){
+        tiddlerPriority = tiddlerPslice;
+      }
+    }
+    
+    var project = this;
+    var projectT = this.getParent("Project");
+    var projectPriority = tiddlerPriority;
+    if(projectT && projectT.length != 0){
+      project = store.getTiddler(projectT);
+      var projectP = project.getParent("Priority");
+      if(projectP){
+        var projectPslice = store.getTiddlerSlice(projectP,"priority");
+        if(projectPslice){
+          projectPriority = projectPslice;
+        }
+      }
+    }
+    
+    var focusT = project.getParent("Focus");
+    var focusPriority = projectPriority;
+    if(focusT && focusT.length != 0){
+      var focus = store.getTiddler(focusT);
+      var focusP = focus.getParent("Priority");
+      if(focusP){
+        var focusPslice = store.getTiddlerSlice(focusP,"priority");
+        if(focusPslice){
+          focusPriority = focusPslice;
+        }
+      }
+    }
+    
+    return "" + focusPriority + projectPriority + tiddlerPriority + this.title;
+  },
 
   sort_SixLevelModel: function() {
     var whydoS = "";

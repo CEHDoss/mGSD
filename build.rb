@@ -19,6 +19,7 @@ required = [
   ['Reference', 'GTDComponent'],
   ['Contact', 'GTDComponent'],
   ['Realm', 'GTDComponent'],
+  ['Priority', 'GTDComponent'],
 
   ['Starred',       'GTDComponent'],
 
@@ -185,6 +186,10 @@ make_tw {
 
   add_tiddlers_from_dir("systemConfig").each do |t|
     get_tiddler(File.basename(t,'.tiddler')).add_tag('systemConfig').add_tag('excludeSearch')
+  end
+
+  add_tiddlers_from_dir("priority").each do |t|
+    get_tiddler(File.basename(t,'.tiddler')).add_tag('Priority')
   end
 
   # generate some content

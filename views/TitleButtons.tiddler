@@ -19,8 +19,9 @@
   <span class="floatright" macro="deleteAllTagged 'delete project' '' 'delete'"></span>
  </div>
  <div>
+  <div class="floatleft"><span class="label">Priority:</span><br><span macro="multiSelectTag Priority Focus"></span></div>
   <div class="floatleft"><span class="label">Horizon:</span><br><span macro="multiSelectTag Horizon"></span></div>
-  <div class="floatleft"><span class="label">Focus</span>:<br><span macro="multiSelectTag Focus allowNone:on"></span><span macro="linkToParent Focus"></span></div>
+  <div class="floatleft"><span class="label">Parent Focus</span>:<br><span macro="multiSelectTag Focus allowNone:on"></span><span macro="linkToParent Focus"></span></div>
   <div class="floatleft"><span class="label">Associated contact</span>:<br><span macro="multiSelectTag Contact allowNone:on"></span><span macro="linkToParent Contact"></span></div>
   <div class="clearboth"></div>
  </div>
@@ -53,6 +54,7 @@
  </div>
  <div>
   <div class="floatleft" macro="else"><span class="label">Context:</span><br/><span macro="multiSelectTag Context allowNone:on"></span><span macro="linkToParent Context"></span></div>
+  <div class="floatleft"><span class="label">Priority:</span><br/><span macro="multiSelectTag Priority"></span><span macro="linkToParent Focus"></span></div>
   <div class="floatleft"><span class="label">Focus:</span><br/><span macro="multiSelectTag Focus allowNone:on"></span><span macro="linkToParent Focus"></span></div>
   <br style="clear:left"/>
   <div class="floatleft">
@@ -172,6 +174,7 @@
    <span class="floatright" macro="convertToFromTickler"></span>
    <span class="floatright" macro="deleteAllTagged 'delete project' '' 'delete'"></span>
   </div>
+  <div class="floatleft"><span class="label">Priority:</span><br><span macro="multiSelectTag Priority"></span></div>
   <div class="floatleft"><span class="label">Horizon:</span><br><span macro="multiSelectTag Horizon"></span></div>
   <div class="floatleft"><span class="label">Focus</span>:<br><span macro="multiSelectTag Focus allowNone:on"></span><span macro="linkToParent Focus"></span></div>
   <div class="clearboth"></div>

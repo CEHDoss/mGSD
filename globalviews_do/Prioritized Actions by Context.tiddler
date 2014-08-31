@@ -1,0 +1,1 @@
+<<mgtdList title:'[[Prioritized Actions by Context]]'	dontShowEmpty:yes	mode:global	group:Context	gSort:orderSlice    sort:Priority	tags:'(Action || Focus || Tickler) && !Done && !Agenda'>>

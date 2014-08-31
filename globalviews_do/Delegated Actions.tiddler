@@ -4,7 +4,7 @@
 	mode:global
 	group:Focus
 	startTag:Action
-	sort:Priority
+	sort:title
 	tags:'[(Waiting For)] && !Done && !Agenda'
 	where:tiddler.hasActiveProject()
 >>

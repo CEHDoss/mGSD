@@ -16,7 +16,8 @@ config.mGTD.specialTags = [
   "Tickler",
   "Reference",
   "Contact",
-  "Scratch"
+  "Scratch",
+  "Priority"
 ];
 
 config.mGTD.tagsToIndex = [
@@ -32,7 +33,8 @@ config.mGTD.tagsToIndex = [
   "GTDComponent",
   "Sidebar",
   "Contact",
-  "TicklerRepeatType"
+  "TicklerRepeatType",
+  "Priority"
 ];
 
 config.mgtdVersion = "__REV__";
